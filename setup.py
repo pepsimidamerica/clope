@@ -10,5 +10,6 @@ setup(
     author="Jordan Maynor",
     author_email="jmaynor@pepsimidamerica.com",
     packages=find_packages(),
+    python_requires='>=3.12',
     install_requires=required,
 )
