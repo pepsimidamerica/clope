@@ -1,5 +1,5 @@
 requests
 setuptools
 pandas==2.2.1
-pyarrow==15.0.1
+pyarrow==15.0.2
 openpyxl==3.1.2
