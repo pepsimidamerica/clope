@@ -1,0 +1,5 @@
+requests
+setuptools
+pandas==2.2.1
+pyarrow==15.0.1
+openpyxl==3.1.2
