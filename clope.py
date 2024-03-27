@@ -1,3 +1,8 @@
+"""
+clope is a package for pulling data from the Cantaloupe/Seed Office system.
+Primarily via the Spotlight API.
+"""
+
 import os
 import shutil
 from datetime import datetime
