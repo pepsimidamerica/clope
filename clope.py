@@ -11,24 +11,6 @@ from typing import List, Tuple
 import pandas
 import requests
 
-# Check for environment variables
-# Required
-if "CLO_USERNAME" not in os.environ:
-    raise Exception("CLO_USERNAME environment variable not set")
-clo_username = os.environ["CLO_USERNAME"]
-if "CLO_PASSWORD" not in os.environ:
-    raise Exception("CLO_PASSWORD environment variable not set")
-clo_password = os.environ["CLO_PASSWORD"]
-# Optional
-if "CLO_BASE_URL" not in os.environ:
-    clo_base_url = "https://api.mycantaloupe.com"
-else:
-    clo_base_url = os.environ["CLO_BASE_URL"]
-if "CLO_ARCHIVE_FILES" not in os.environ:
-    clo_archive_files = False
-else:
-    clo_archive_files = os.environ["CLO_ARCHIVE_FILES"].lower() == "true"
-
 
 def run_report(
     report_id: str, params: List[Tuple[str, str]] = None
@@ -38,9 +20,28 @@ def run_report(
     Uses Basic authentication with username and password.
     Returns a pandas dataframe of the report data.
     """
+    # Check for environment variables
+    # Required
+    if "CLO_USERNAME" not in os.environ:
+        raise Exception("CLO_USERNAME environment variable not set")
+    clo_username = os.environ["CLO_USERNAME"]
+    if "CLO_PASSWORD" not in os.environ:
+        raise Exception("CLO_PASSWORD environment variable not set")
+    clo_password = os.environ["CLO_PASSWORD"]
+    # Optional
+    if "CLO_BASE_URL" not in os.environ:
+        clo_base_url = "https://api.mycantaloupe.com"
+    else:
+        clo_base_url = os.environ["CLO_BASE_URL"]
+    if "CLO_ARCHIVE_FILES" not in os.environ:
+        clo_archive_files = False
+    else:
+        clo_archive_files = os.environ["CLO_ARCHIVE_FILES"].lower() == "true"
+
     if params is None:
         params = []
     params.append(("ReportId", report_id))
+
     response = requests.get(
         clo_base_url + "/Reports/Run",
         auth=(clo_username, clo_password),
