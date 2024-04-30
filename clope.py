@@ -13,12 +13,16 @@ import requests
 
 
 def run_report(
-    report_id: str, params: List[Tuple[str, str]] = None
+    report_id: str, params: List[Tuple[str, str]] = None, dtype: dict = None
 ) -> pandas.DataFrame:
     """
     Send GET request to Cantaloupe API to run report and receive excel file data.
     Uses Basic authentication with username and password.
     Returns a pandas dataframe of the report data.
+
+    Takes two optional parameters:
+    - params: List of tuples to pass as parameters in the GET request. Usually date ranges.
+    - dtype: Dictionary of column names and data types to cast columns to.
     """
     # Check for environment variables
     # Required
@@ -63,7 +67,9 @@ def run_report(
         exit(1)
 
     try:
-        report_df = pandas.read_excel(f"report{report_id}.xlsx", sheet_name="Report")
+        report_df = pandas.read_excel(
+            f"report{report_id}.xlsx", sheet_name="Report", dtype=dtype
+        )
     except Exception as e:
         print("Error reading excel file: ", e)
         raise Exception("Error reading excel file", e)
