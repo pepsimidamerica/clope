@@ -10,6 +10,8 @@ from typing import List, Tuple
 
 import pandas
 import requests
+import snowflake.connector
+from dotenv import load_dotenv
 
 
 def run_report(
@@ -101,3 +103,67 @@ def run_report(
         print("No data returned from report")
 
     return report_df
+
+
+def _get_snowflake_connection():
+    """
+    Connect to Snowflake data warehouse using environment variables.
+    """
+    conn = snowflake.connector.connect(
+        user=os.environ["SNOWFLAKE_USER"],
+        password=os.environ["SNOWFLAKE_PASSWORD"],
+        account=os.environ["SNOWFLAKE_ACCOUNT"],
+        warehouse=os.environ["SNOWFLAKE_WAREHOUSE"],
+        database=os.environ["SNOWFLAKE_DATABASE"],
+        schema=os.environ["SNOWFLAKE_SCHEMA"],
+    )
+    return conn
+
+
+def list_tables() -> List[str]:
+    """
+    List all tables in Snowflake database.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute("SHOW VIEWS")
+        tables = cur.fetchall()
+    except Exception as e:
+        print("Error listing Snowflake tables: ", e)
+        raise Exception("Error listing Snowflake tables", e)
+    finally:
+        conn.close()
+    pass
+    return [table[1] for table in tables]
+
+
+def get_table_data(table_name: str) -> pandas.DataFrame:
+    """
+    Get data from Snowflake table.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM {table_name}"
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        print("Error reading Snowflake table: ", e)
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df
+
+
+if __name__ == "__main__":
+    """
+    Example usage
+    """
+    # Load env vars from .env file
+    load_dotenv()
+
+    # table_list = list_tables()
+    branches = get_table_data("DIMBRANCH_V")
+
+    pass
