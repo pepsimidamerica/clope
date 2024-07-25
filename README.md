@@ -1,6 +1,6 @@
 # Overview
 
-clope (see-lope) is a Python package for interacting with the Cantaloupe/Seed vending system. Primarily being a wrapper for their Spotlight API. It uses the pandas library to return information from a given spotlight report as a dataframe object. Intention is to add functionality for connecting to the snowflake data warehouse Cantaloupe product as well.
+clope (see-lope) is a Python package for interacting with the Cantaloupe/Seed vending system. Primarily being a wrapper for their Spotlight API. It uses the pandas library to return information from a given spotlight report as a dataframe object. It also has functionality for connecting to the snowflake data warehouse Cantaloupe product as well.
 
 ## Installation
 
@@ -19,7 +19,7 @@ Several environment variables are required for clope to function.
 
 ### Run Spotlight Report (run_report())
 
-The primary, and currently only, function. Used to run a spotlight report, retrieve the excel results, and transform the excel file into a workable pandas dataframe. Cantaloupe's spotlight reports return an excel file with two tabs: Report and Stats. This pulls the info from the Report tab, Stats is ignored.
+The primary function. Used to run a spotlight report, retrieve the excel results, and transform the excel file into a workable pandas dataframe. Cantaloupe's spotlight reports return an excel file with two tabs: Report and Stats. This pulls the info from the Report tab, Stats is ignored.
 
 > Note: Make sure your spotlight report has been shared with the "Seed Spotlight API Users" security group in Seed Office. Won't be accessible otherwise.
 

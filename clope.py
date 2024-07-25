@@ -120,9 +120,9 @@ def _get_snowflake_connection():
     return conn
 
 
-def list_tables() -> List[str]:
+def list_views() -> List[str]:
     """
-    List all tables in Snowflake database.
+    List all views in Snowflake database.
     """
     conn = _get_snowflake_connection()
     try:
@@ -130,17 +130,15 @@ def list_tables() -> List[str]:
         cur.execute("SHOW VIEWS")
         tables = cur.fetchall()
     except Exception as e:
-        print("Error listing Snowflake tables: ", e)
-        raise Exception("Error listing Snowflake tables", e)
+        raise Exception("Error listing Snowflake views", e)
     finally:
         conn.close()
-    pass
     return [table[1] for table in tables]
 
 
-def get_table_data(table_name: str) -> pandas.DataFrame:
+def get_view_data(table_name: str) -> pandas.DataFrame:
     """
-    Get data from Snowflake table.
+    Get data from a Snowflake table.
     """
     conn = _get_snowflake_connection()
     try:
@@ -163,7 +161,7 @@ if __name__ == "__main__":
     # Load env vars from .env file
     load_dotenv()
 
-    # table_list = list_tables()
+    # table_list = list_views()
     branches = get_table_data("DIMBRANCH_V")
 
     pass
