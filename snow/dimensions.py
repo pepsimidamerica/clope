@@ -1,6 +1,6 @@
 import pandas
 
-from connection_handling import _get_snowflake_connection
+from snow.connection_handling import _get_snowflake_connection
 
 
 def get_operators() -> pandas.DataFrame:

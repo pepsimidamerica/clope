@@ -1,4 +1,4 @@
-from connection_handling import _get_snowflake_connection
+from snowflake.connection_handling import _get_snowflake_connection
 
 # Function collections fact
 # Function recognize sales revenue fact
