@@ -816,3 +816,45 @@ def get_warehouse_receive_fact(
     finally:
         conn.close()
     return df
+
+
+def get_machine_alerts_fact(
+    branch: int = None,
+    customer: int = None,
+    location: int = None,
+    machine: int = None,
+    micro_market: int = None,
+    date_range: tuple[int, int] = None,
+) -> pandas.DataFrame:
+    """
+    This fact contains info on machine alerts that Cantaloupe has raised.
+    Out of order, not dexing, etc.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM MACHINEALERTSFACT_V"
+        conditions = []
+        if branch:
+            conditions.append(f"BRANCHKEY = {branch}")
+        if customer:
+            conditions.append(f"CUSTOMERKEY = {customer}")
+        if location:
+            conditions.append(f"LOCATIONKEY = {location}")
+        if machine:
+            conditions.append(f"MACHINEKEY = {machine}")
+        if micro_market:
+            conditions.append(f"MICROMARKETKEY = {micro_market}")
+        if date_range:
+            conditions.append(
+                f"CREATEDDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+            )
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df

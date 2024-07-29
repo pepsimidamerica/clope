@@ -84,6 +84,7 @@ Dimensions describe facts. The location something happened in. The route it happ
 - Supplier Items (Not yet used seemingly)
 - Suppliers
 - Warehouses
+- Machine Alerts
 
 ### Facts
 
