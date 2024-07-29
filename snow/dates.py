@@ -2,7 +2,8 @@
 This module contains functionality to translate between datekeys and dates.
 
 Technically there are tables containing this data, but I don't think
-it's necessary to actually query them. We can just calculate directly.
+it's necessary to actually query them. We can just calculate them directly.
+Should be much quicker.
 """
 
 from datetime import datetime, timedelta

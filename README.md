@@ -57,7 +57,7 @@ Cantaloupe also offers a data warehouse product in Snowflake. Good for aggregati
 
 Also something to keep in mind is that the system makes use of SCD (slowly changing dimension) in order to keep track of historical info vs current info. So some care should be taken when interpreting the data.
 
-For each dataset that uses SCD, a parameter has been included to restrict to current data only or include all data. Intention is to add more parameters as the need arises for each function. Date ranges or restricting by key field, etc.
+For each dataset that uses SCD, a parameter has been included to restrict to current data only or include all data.
 
 ### Dates
 
@@ -90,7 +90,23 @@ Dimensions describe facts. The location something happened in. The route it happ
 A fact is the central information being stored. Generally, things that are not changing. A sale, an inventory, a product movement.
 
 - Cashless Vending Tranaction
+- Collection Micromarket Sales
+- Order to Fulfillment (Delivery)
+- Order to Fulfillment (Vending and Micromarket)
+- Delivery Order Receive
+- Sales Revenue By Day
+- Sales Revenue By Visit
+- Sales By Coil
+- Scheduling Machine
+- Scheduling Route Summary
+- Telemetry Sales
+- Vending Micromarket Visit
+- Warehouse Inventory
+- Warehouse Observed Inventory
+- Warehouse Product Movement
+- Warehouse Purchase
+- Warehouse Receive
 
 ### Functions
 
-Also included in Cantaloupe's Snowflake are a couple functions. General intention seems to be gathering a subset of data from a couple core fact tables.
+Also included in Cantaloupe's Snowflake are a couple functions. General intention seems to be gathering a subset of data from a couple core fact tables. Haven't yet implemented wrappers for these.

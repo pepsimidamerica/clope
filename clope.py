@@ -24,10 +24,10 @@ if __name__ == "__main__":
     load_dotenv()
 
     res = get_sales_revenue_by_visit_fact(
-        branch=2990,
+        # branch=2990,
         date_range=(
             date_to_datekey(datetime(2024, 7, 1)),
-            date_to_datekey(datetime(2024, 7, 23)),
+            date_to_datekey(datetime(2024, 7, 31)),
         ),
     )
 
