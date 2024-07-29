@@ -456,17 +456,363 @@ def get_scheduling_machine_fact(
     date_range: tuple[int, int] = None,
 ) -> pandas.DataFrame:
     """
-    This fact provides information on the scheduling of machines.
+    This fact provides information on the scheduling of machines, what caused
+    it to be scheduled, whether the schedule was edited.
     """
-    pass
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM SCHEDULINGMACHINEFACT_V"
+        conditions = []
+        if branch:
+            conditions.append(f"BRANCHKEY = {branch}")
+        if customer:
+            conditions.append(f"CUSTOMERKEY = {customer}")
+        if location:
+            conditions.append(f"LOCATIONKEY = {location}")
+        if line_of_business:
+            conditions.append(f"LINEOFBUSINESSKEY = {line_of_business}")
+        if machine:
+            conditions.append(f"MACHINEKEY = {machine}")
+        if micro_market:
+            conditions.append(f"MICROMARKETKEY = {micro_market}")
+        if route:
+            conditions.append(f"ROUTEKEY = {route}")
+        if date_range:
+            conditions.append(
+                f"SCHEDULEDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+            )
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df
 
 
-# Scheduling route summary fact
-# Telemetry sales fact
-# Vending Market Visit item fact
+def get_scheduling_route_summary_fact(
+    branch: int = None,
+    route: int = None,
+    line_of_business: int = None,
+    date_range: tuple[int, int] = None,
+) -> pandas.DataFrame:
+    """
+    This fact is a roll-up view of the statistics associated with schedules.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM SCHEDULINGROUTESUMMARYFACT_V"
+        conditions = []
+        if branch:
+            conditions.append(f"BRANCHKEY = {branch}")
+        if route:
+            conditions.append(f"ROUTEKEY = {route}")
+        if line_of_business:
+            conditions.append(f"LINEOFBUSINESSKEY = {line_of_business}")
+        if date_range:
+            conditions.append(
+                f"SCHEDULINGDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+            )
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df
 
-# Warehouse inventory fact
-# Warehouse observed inventory fact
-# Warehouse product movement fact
-# Warehouse purchase fact
-# Warehouse receive fact
+
+def get_telemetry_sales_fact(
+    location: int = None,
+    machine: int = None,
+    device: int = None,
+    item: int = None,
+    date_range: tuple[int, int] = None,
+) -> pandas.DataFrame:
+    """
+    This fact shows the sales reported on each product at each call from a
+    telemeter from a vending machine.  All products associated with the
+    machine at the time of the call are included.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM TELEMETRYSALESFACT_V"
+        conditions = []
+        if location:
+            conditions.append(f"LOCATIONKEY = {location}")
+        if machine:
+            conditions.append(f"MACHINEKEY = {machine}")
+        if device:
+            conditions.append(f"DEVICEKEY = {device}")
+        if item:
+            conditions.append(f"ITEMKEY = {item}")
+        if date_range:
+            conditions.append(
+                f"TRANSACTIONDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+            )
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df
+
+
+def get_vending_micromarket_visit_item_fact(
+    branch: int = None,
+    customer: int = None,
+    location: int = None,
+    machine: int = None,
+    route: int = None,
+    line_of_business: int = None,
+    micro_market: int = None,
+    item: int = None,
+    date_range: tuple[int, int] = None,
+) -> pandas.DataFrame:
+    """
+    This fact provides the item level inventory and delivery information
+    for replenishment visits for Vending and Micromarkets.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM VENDINGMICROMARKETVISITITEMFACT_V"
+        conditions = []
+        if branch:
+            conditions.append(f"BRANCHKEY = {branch}")
+        if customer:
+            conditions.append(f"CUSTOMERKEY = {customer}")
+        if location:
+            conditions.append(f"LOCATIONKEY = {location}")
+        if machine:
+            conditions.append(f"MACHINEKEY = {machine}")
+        if route:
+            conditions.append(f"ROUTEKEY = {route}")
+        if line_of_business:
+            conditions.append(f"LINEOFBUSINESSKEY = {line_of_business}")
+        if micro_market:
+            conditions.append(f"MICROMARKETKEY = {micro_market}")
+        if item:
+            conditions.append(f"ITEMKEY = {item}")
+        if date_range:
+            conditions.append(
+                f"VISITDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+            )
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df
+
+
+def get_warehouse_inventory_fact(
+    branch: int = None,
+    warehouse: int = None,
+    item: int = None,
+    item_pack: int = None,
+    date_range: tuple[int, int] = None,
+) -> pandas.DataFrame:
+    """
+    This fact provides a view of the start of day inventory for each warehouse.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM WAREHOUSEINVENTORYFACT_V"
+        conditions = []
+        if branch:
+            conditions.append(f"BRANCHKEY = {branch}")
+        if warehouse:
+            conditions.append(f"WAREHOUSEKEY = {warehouse}")
+        if item:
+            conditions.append(f"ITEMKEY = {item}")
+        if item_pack:
+            conditions.append(f"PARPACKKEY = {item_pack}")
+        if date_range:
+            conditions.append(
+                f"INVENTORYDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+            )
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df
+
+
+def get_warehouse_observed_inventory_fact(
+    branch: int = None,
+    warehouse: int = None,
+    item: int = None,
+    item_pack: int = None,
+    date_range: tuple[int, int] = None,
+) -> pandas.DataFrame:
+    """
+    This fact provides the view of the observed inventories that were captured.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM WAREHOUSEOBSERVEDINVENTORYFACT_V"
+        conditions = []
+        if branch:
+            conditions.append(f"BRANCHKEY = {branch}")
+        if warehouse:
+            conditions.append(f"WAREHOUSEKEY = {warehouse}")
+        if item:
+            conditions.append(f"ITEMKEY = {item}")
+        if item_pack:
+            conditions.append(f"ITEMPACKKEY = {item_pack}")
+        if date_range:
+            conditions.append(
+                f"EFFECTIVEDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+            )
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df
+
+
+def get_warehouse_prod_movement_fact(
+    branch: int = None,
+    from_warehouse: int = None,
+    to_warehouse: int = None,
+    item: int = None,
+    item_pack: int = None,
+    date_range: tuple[int, int] = None,
+) -> pandas.DataFrame:
+    """
+    This fact is for reporting on all product movements.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM WAREHOUSEPRODUCTMOVEMENTFACT_V"
+        conditions = []
+        if branch:
+            conditions.append(f"BRANCHKEY = {branch}")
+        if from_warehouse:
+            conditions.append(f"FROMWAREHOUSEKEY = {from_warehouse}")
+        if to_warehouse:
+            conditions.append(f"TOWAREHOUSEKEY = {to_warehouse}")
+        if item:
+            conditions.append(f"ITEMKEY = {item}")
+        if item_pack:
+            conditions.append(f"ITEMPACKKEY = {item_pack}")
+        if date_range:
+            conditions.append(
+                f"EFFECTIVEDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+            )
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df
+
+
+def get_warehouse_purchase_fact(
+    branch: int = None,
+    warehouse: int = None,
+    item: int = None,
+    item_pack: int = None,
+    supplier: int = None,
+    date_range: tuple[int, int] = None,
+) -> pandas.DataFrame:
+    """
+    This fact provides the view of the purchases made by the warehouse.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM WAREHOUSEPURCHASEFACT_V"
+        conditions = []
+        if branch:
+            conditions.append(f"BRANCHKEY = {branch}")
+        if warehouse:
+            conditions.append(f"WAREHOUSEKEY = {warehouse}")
+        if item:
+            conditions.append(f"ITEMKEY = {item}")
+        if item_pack:
+            conditions.append(f"ITEMPACKKEY = {item_pack}")
+        if supplier:
+            conditions.append(f"SUPPLIERKEY = {supplier}")
+        if date_range:
+            conditions.append(
+                f"EFFECTIVEDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+            )
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df
+
+
+def get_warehouse_receive_fact(
+    branch: int = None,
+    warehouse: int = None,
+    item: int = None,
+    item_pack: int = None,
+    supplier: int = None,
+    date_range: tuple[int, int] = None,
+) -> pandas.DataFrame:
+    """
+    This fact provides info about what was received by the warehouse.
+    """
+    conn = _get_snowflake_connection()
+    try:
+        query = f"SELECT * FROM WAREHOUSERECEIVEFACT_V"
+        conditions = []
+        if branch:
+            conditions.append(f"BRANCHKEY = {branch}")
+        if warehouse:
+            conditions.append(f"WAREHOUSEKEY = {warehouse}")
+        if item:
+            conditions.append(f"ITEMKEY = {item}")
+        if item_pack:
+            conditions.append(f"ITEMPACKKEY = {item_pack}")
+        if supplier:
+            conditions.append(f"SUPPLIERKEY = {supplier}")
+        if date_range:
+            conditions.append(
+                f"EFFECTIVEDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+            )
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        cur = conn.cursor()
+        cur.execute(query)
+        df = cur.fetch_pandas_all()
+    except Exception as e:
+        raise Exception("Error reading Snowflake table", e)
+    finally:
+        conn.close()
+    return df
