@@ -1,5 +1,5 @@
 requests
-pandas==2.2.2
-pyarrow==17.0.0
-openpyxl==3.1.5
-snowflake-connector-python[pandas]==3.11.0
+pandas
+pyarrow
+openpyxl
+snowflake-connector-python[pandas]
