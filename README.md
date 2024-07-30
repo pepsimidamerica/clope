@@ -4,7 +4,7 @@ clope (see-lope) is a Python package for interacting with the Cantaloupe/Seed ve
 
 ## Installation
 
-Haven't yet bothered to publish as a python package, intent is to simply add clope as a git submodule in any projects where it's needed.
+`pip install clope`
 
 ## Usage
 
