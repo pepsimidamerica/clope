@@ -1,6 +1,5 @@
 import pandas
-
-from snow.connection_handling import _get_snowflake_connection
+from clope.snow.connection_handling import _get_snowflake_connection
 
 
 def get_cashless_vending_transaction_fact(
