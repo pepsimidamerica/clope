@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pandas
 from clope.snow.connection_handling import _get_snowflake_connection
 
@@ -13,6 +15,13 @@ def get_cashless_vending_transaction_fact(
     """
     This fact is about the money related to a transaction.
     Pertains to vending and micromarkets lines of business only.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param machine: The machine key
+    :param item: The item key
+    :param date_range: The date range the item was sold, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -57,6 +66,15 @@ def get_collection_fact(
     """
     This fact is about the collection of money at a vend visit.
     Pertains to vending and micromarkets lines of business only.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param machine: The machine key
+    :param micro_market: The micro market key
+    :param route: The route key
+    :param line_of_business: The line of business key
+    :param date_range: The date range the item was collected, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -103,6 +121,14 @@ def get_micromarket_salesfact(
 ) -> pandas.DataFrame:
     """
     This fact is about the sales of items at a micromarket.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param machine: The machine key
+    :param micro_market: The micro market key
+    :param item: The item key
+    :param date_range: The date range the item was sold, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -152,6 +178,15 @@ def get_order_fulfillment_delivery_fact(
     creation, prepick, pick, and delivery.
     PrepickQuantity reflects any changes made to the order after its initial
     creation but before picking.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param line_of_business: The line of business key
+    :param machine: The machine key
+    :param item: The item key
+    :param item_pack: The item pack key
+    :param date_range: The date range the item was delivered, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -200,6 +235,15 @@ def get_order_fulfillment_vending_market_fact(
     """
     This fact illustrates the flow of product from prepick to delivery
     for each vending machine and market section.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param machine: The machine key
+    :param line_of_business: The line of business key
+    :param micro_market: The micro market key
+    :param item: The item key
+    :param date_range: The date range the item was delivered, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -247,6 +291,14 @@ def get_delivery_order_receipt_fact(
     """
     This face returns information on the receipt of a delivery order and
     the original order details.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param machine: The machine key
+    :param item: The item key
+    :param item_pack: The item pack key
+    :param date_range: The date range the item was received, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -300,6 +352,17 @@ def get_sales_revenue_by_day_fact(
 
     Note that for Markets, the Spoils and Commissions are not available in
     this view, as they are tied to the visit.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param machine: The machine key
+    :param item: The item key
+    :param item_pack: The item pack key
+    :param route: The route key
+    :param line_of_business: The line of business key
+    :param micro_market: The micro market key
+    :param date_range: The date range of sales, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -355,6 +418,17 @@ def get_sales_revenue_by_visit_fact(
     This fact provides sales revenue by visit.
     For delivery, this is revenue for the deliveries made.
     For vending and market, this is sales and revenue since the prior visit.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param machine: The machine key
+    :param item: The item key
+    :param item_pack: The item pack key
+    :param route: The route key
+    :param line_of_business: The line of business key
+    :param micro_market: The micro market key
+    :param date_range: The date range of visits, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -407,6 +481,16 @@ def get_sales_by_coil(
 ) -> pandas.DataFrame:
     """
     This fact provides sales by coil for each day.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param line_of_business: The line of business key
+    :param machine: The machine key
+    :param item: The item key
+    :param micro_market: The micro market key
+    :param coil: The coil key
+    :param date_range: The date range of sales, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -457,6 +541,15 @@ def get_scheduling_machine_fact(
     """
     This fact provides information on the scheduling of machines, what caused
     it to be scheduled, whether the schedule was edited.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param line_of_business: The line of business key
+    :param machine: The machine key
+    :param micro_market: The micro market key
+    :param route: The route key
+    :param date_range: The date range the item was scheduled, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -500,6 +593,11 @@ def get_scheduling_route_summary_fact(
 ) -> pandas.DataFrame:
     """
     This fact is a roll-up view of the statistics associated with schedules.
+
+    :param branch: The branch key
+    :param route: The route key
+    :param line_of_business: The line of business key
+    :param date_range: The date range the item was scheduled, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -538,6 +636,12 @@ def get_telemetry_sales_fact(
     This fact shows the sales reported on each product at each call from a
     telemeter from a vending machine.  All products associated with the
     machine at the time of the call are included.
+
+    :param location: The location key
+    :param machine: The machine key
+    :param device: The device key
+    :param item: The item key
+    :param date_range: The date range the item was sold, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -581,6 +685,16 @@ def get_vending_micromarket_visit_item_fact(
     """
     This fact provides the item level inventory and delivery information
     for replenishment visits for Vending and Micromarkets.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param machine: The machine key
+    :param route: The route key
+    :param line_of_business: The line of business key
+    :param micro_market: The micro market key
+    :param item: The item key
+    :param date_range: The date range the item was visited, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -627,6 +741,12 @@ def get_warehouse_inventory_fact(
 ) -> pandas.DataFrame:
     """
     This fact provides a view of the start of day inventory for each warehouse.
+
+    :param branch: The branch key
+    :param warehouse: The warehouse key
+    :param item: The item key
+    :param item_pack: The item pack key
+    :param date_range: The date range the item was received, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -665,6 +785,12 @@ def get_warehouse_observed_inventory_fact(
 ) -> pandas.DataFrame:
     """
     This fact provides the view of the observed inventories that were captured.
+
+    :param branch: The branch key
+    :param warehouse: The warehouse key
+    :param item: The item key
+    :param item_pack: The item pack key
+    :param date_range: The date range the item was observed, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -704,6 +830,13 @@ def get_warehouse_prod_movement_fact(
 ) -> pandas.DataFrame:
     """
     This fact is for reporting on all product movements.
+
+    :param branch: The branch key
+    :param from_warehouse: The warehouse key the product is moving from
+    :param to_warehouse: The warehouse key the product is moving to
+    :param item: The item key
+    :param item_pack: The item pack key
+    :param date_range: The date range the item was moved, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -745,6 +878,13 @@ def get_warehouse_purchase_fact(
 ) -> pandas.DataFrame:
     """
     This fact provides the view of the purchases made by the warehouse.
+
+    :param branch: The branch key
+    :param warehouse: The warehouse key
+    :param item: The item key
+    :param item_pack: The item pack key
+    :param supplier: The supplier key
+    :param date_range: The date range the item was purchased, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -786,6 +926,13 @@ def get_warehouse_receive_fact(
 ) -> pandas.DataFrame:
     """
     This fact provides info about what was received by the warehouse.
+
+    :param branch: The branch key
+    :param warehouse: The warehouse key
+    :param item: The item key
+    :param item_pack: The item pack key
+    :param supplier: The supplier key
+    :param date_range: The date range the item was received, as a tuple of date keys
     """
     conn = _get_snowflake_connection()
     try:
@@ -823,11 +970,20 @@ def get_machine_alerts_fact(
     location: int = None,
     machine: int = None,
     micro_market: int = None,
-    date_range: tuple[int, int] = None,
+    effective_date_range: tuple[int, int] = None,
+    added_date_range: tuple[datetime, datetime] = None,
 ) -> pandas.DataFrame:
     """
     This fact contains info on machine alerts that Cantaloupe has raised.
     Out of order, not dexing, etc.
+
+    :param branch: The branch key
+    :param customer: The customer key
+    :param location: The location key
+    :param machine: The machine key
+    :param micro_market: The micro market key
+    :param effective_date_range: The date range the alert was effective, as a tuple of date keys
+    :param added_date_range: The date range the alert was added, as a tuple of datetime objects
     """
     conn = _get_snowflake_connection()
     try:
@@ -843,9 +999,13 @@ def get_machine_alerts_fact(
             conditions.append(f"MACHINEKEY = {machine}")
         if micro_market:
             conditions.append(f"MICROMARKETKEY = {micro_market}")
-        if date_range:
+        if effective_date_range:
             conditions.append(
-                f"CREATEDDATEKEY BETWEEN {date_range[0]} AND {date_range[1]}"
+                f"CREATEDDATEKEY BETWEEN {effective_date_range[0]} AND {effective_date_range[1]}"
+            )
+        if added_date_range:
+            conditions.append(
+                f"INSERTDATETIME BETWEEN '{added_date_range[0]}' AND '{added_date_range[1]}'"
             )
         if conditions:
             query += " WHERE " + " AND ".join(conditions)
