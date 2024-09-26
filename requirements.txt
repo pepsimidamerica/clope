@@ -3,3 +3,4 @@ pandas
 pyarrow
 openpyxl
 snowflake-connector-python[pandas]
+tenacity
