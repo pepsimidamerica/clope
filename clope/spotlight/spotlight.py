@@ -52,6 +52,7 @@ def run_report(
             + "/Reports/Run",
             auth=(os.environ["CLO_USERNAME"], os.environ["CLO_PASSWORD"]),
             params=params,
+            timeout=300,
         )
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
