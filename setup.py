@@ -8,7 +8,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="clope",
-    version="0.1.5",
+    version="0.1.6",
     description="Python package for interacting with the Cantaloupe/Seed vending system. Primarily the Spotlight API.",
     long_description=long_description,
     long_description_content_type="text/markdown",
