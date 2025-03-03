@@ -7,9 +7,3 @@ from .snow.dates import *
 from .snow.dimensions import *
 from .snow.facts import *
 from .spotlight.spotlight import run_report
-
-if __name__ == "__main__":
-    """
-    Example usage
-    """
-    pass

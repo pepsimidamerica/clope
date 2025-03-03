@@ -2,6 +2,7 @@
 Module contains a function for interacting with the Cantaloupe Spotlight API.
 """
 
+import logging
 import os
 import shutil
 from datetime import datetime
@@ -10,11 +11,15 @@ from typing import List, Tuple
 import pandas
 import requests
 from tenacity import (
+    after_log,
+    before_log,
     retry,
     retry_if_exception_type,
     stop_after_attempt,
     wait_exponential,
 )
+
+from clope._logger import logger
 
 
 @retry(
@@ -23,6 +28,8 @@ from tenacity import (
     retry=retry_if_exception_type(
         (requests.exceptions.ConnectionError, requests.exceptions.Timeout)
     ),
+    before=before_log(logger, logging.INFO),
+    after=after_log(logger, logging.INFO),
 )
 def run_report(
     report_id: str, params: List[Tuple[str, str]] = None, dtype: dict = None
@@ -56,10 +63,14 @@ def run_report(
         )
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
+        logger.error(
+            f"Error, could not run report: {e.response.status_code} - {e.response.content}"
+        )
         raise Exception(
             f"Error, could not run report: {e.response.status_code} - {e.response.content}"
         )
     except requests.exceptions.RequestException as e:
+        logger.error(f"Error, could not run report: {e}")
         raise Exception(f"Error, could not run report: {e}")
 
     excel_data = response.content
@@ -69,6 +80,7 @@ def run_report(
         with open(f"report{report_id}.xlsx", "wb") as f:
             f.write(excel_data)
     except Exception as e:
+        logger.error(f"Error saving excel file: {e}")
         raise Exception(f"Error saving excel file {e}")
 
     try:
@@ -76,6 +88,7 @@ def run_report(
             f"report{report_id}.xlsx", sheet_name="Report", dtype=dtype
         )
     except Exception as e:
+        logger.error(f"Error reading excel file: {e}")
         raise Exception(f"Error reading excel file: {e}")
 
     # Delete temp excel file
@@ -100,11 +113,11 @@ def _handle_temp_file(report_id: str):
                 os.path.join(new_dir, f"report{report_id}.xlsx"),
             )
         except Exception as e:
-            print("Error moving excel file: ", e)
+            logger.error(f"Error moving excel file: {e}")
             raise Exception("Error moving excel file", e)
     else:
         try:
             os.remove(f"report{report_id}.xlsx")
         except Exception as e:
-            print("Error deleting excel file: ", e)
+            logger.error(f"Error deleting excel file: {e}")
             raise Exception("Error deleting excel file", e)

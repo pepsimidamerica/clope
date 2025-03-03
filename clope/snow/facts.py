@@ -1,6 +1,8 @@
 from datetime import datetime
 
 import pandas
+
+from clope._logger import logger
 from clope.snow.connection_handling import _get_snowflake_connection
 
 
@@ -25,7 +27,7 @@ def get_cashless_vending_transaction_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM CASHLESSVENDINGTRANSACTIONFACT_V"
+        query = "SELECT * FROM CASHLESSVENDINGTRANSACTIONFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -47,6 +49,7 @@ def get_cashless_vending_transaction_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -78,7 +81,7 @@ def get_collection_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM COLLECTIONFACT_V"
+        query = "SELECT * FROM COLLECTIONFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -104,6 +107,7 @@ def get_collection_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -132,7 +136,7 @@ def get_micromarket_salesfact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM MICROMARKETSALESFACT_V"
+        query = "SELECT * FROM MICROMARKETSALESFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -156,6 +160,7 @@ def get_micromarket_salesfact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -190,7 +195,7 @@ def get_order_fulfillment_delivery_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM ORDERFULFILLMENTDELIVERYFACT_V"
+        query = "SELECT * FROM ORDERFULFILLMENTDELIVERYFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -216,6 +221,7 @@ def get_order_fulfillment_delivery_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -247,7 +253,7 @@ def get_order_fulfillment_vending_market_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM ORDERFULFILLMENTVENDINGMARKETFACT_V"
+        query = "SELECT * FROM ORDERFULFILLMENTVENDINGMARKETFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -273,6 +279,7 @@ def get_order_fulfillment_vending_market_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -302,7 +309,7 @@ def get_delivery_order_receipt_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM RECEIVEDELIVERYORDERFACT_V"
+        query = "SELECT * FROM RECEIVEDELIVERYORDERFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -326,6 +333,7 @@ def get_delivery_order_receipt_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -366,7 +374,7 @@ def get_sales_revenue_by_day_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM RECOGNIZESALESREVENUEFACTBYDAY_V"
+        query = "SELECT * FROM RECOGNIZESALESREVENUEFACTBYDAY_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -396,6 +404,7 @@ def get_sales_revenue_by_day_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -432,7 +441,7 @@ def get_sales_revenue_by_visit_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM RECOGNIZESALESREVENUEFACTBYVISIT_V"
+        query = "SELECT * FROM RECOGNIZESALESREVENUEFACTBYVISIT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -462,6 +471,7 @@ def get_sales_revenue_by_visit_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -494,7 +504,7 @@ def get_sales_by_coil(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM SALESBYCOILFACT_V"
+        query = "SELECT * FROM SALESBYCOILFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -522,6 +532,7 @@ def get_sales_by_coil(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -553,7 +564,7 @@ def get_scheduling_machine_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM SCHEDULINGMACHINEFACT_V"
+        query = "SELECT * FROM SCHEDULINGMACHINEFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -579,6 +590,7 @@ def get_scheduling_machine_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -601,7 +613,7 @@ def get_scheduling_route_summary_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM SCHEDULINGROUTESUMMARYFACT_V"
+        query = "SELECT * FROM SCHEDULINGROUTESUMMARYFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -619,6 +631,7 @@ def get_scheduling_route_summary_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -645,7 +658,7 @@ def get_telemetry_sales_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM TELEMETRYSALESFACT_V"
+        query = "SELECT * FROM TELEMETRYSALESFACT_V"
         conditions = []
         if location:
             conditions.append(f"LOCATIONKEY = {location}")
@@ -665,6 +678,7 @@ def get_telemetry_sales_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -698,7 +712,7 @@ def get_vending_micromarket_visit_item_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM VENDINGMICROMARKETVISITITEMFACT_V"
+        query = "SELECT * FROM VENDINGMICROMARKETVISITITEMFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -726,6 +740,7 @@ def get_vending_micromarket_visit_item_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -750,7 +765,7 @@ def get_warehouse_inventory_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM WAREHOUSEINVENTORYFACT_V"
+        query = "SELECT * FROM WAREHOUSEINVENTORYFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -770,6 +785,7 @@ def get_warehouse_inventory_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -794,7 +810,7 @@ def get_warehouse_observed_inventory_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM WAREHOUSEOBSERVEDINVENTORYFACT_V"
+        query = "SELECT * FROM WAREHOUSEOBSERVEDINVENTORYFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -814,6 +830,7 @@ def get_warehouse_observed_inventory_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -840,7 +857,7 @@ def get_warehouse_prod_movement_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM WAREHOUSEPRODUCTMOVEMENTFACT_V"
+        query = "SELECT * FROM WAREHOUSEPRODUCTMOVEMENTFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -862,6 +879,7 @@ def get_warehouse_prod_movement_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -888,7 +906,7 @@ def get_warehouse_purchase_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM WAREHOUSEPURCHASEFACT_V"
+        query = "SELECT * FROM WAREHOUSEPURCHASEFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -910,6 +928,7 @@ def get_warehouse_purchase_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -936,7 +955,7 @@ def get_warehouse_receive_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM WAREHOUSERECEIVEFACT_V"
+        query = "SELECT * FROM WAREHOUSERECEIVEFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -958,6 +977,7 @@ def get_warehouse_receive_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -987,7 +1007,7 @@ def get_machine_alerts_fact(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM MACHINEALERTSFACT_V"
+        query = "SELECT * FROM MACHINEALERTSFACT_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -1013,6 +1033,7 @@ def get_machine_alerts_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()

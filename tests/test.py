@@ -3,8 +3,9 @@ from datetime import datetime, timedelta
 
 sys.path.insert(0, "")
 
-from clope import get_machine_alerts_fact, run_report
-from clope.snow.dates import date_to_datekey, datekey_to_date
+from clope import run_report
+
+# from clope.snow.dates import date_to_datekey, datekey_to_date
 from dotenv import load_dotenv
 
 load_dotenv()

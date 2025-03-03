@@ -1,4 +1,6 @@
 import pandas
+
+from clope._logger import logger
 from clope.snow.connection_handling import _get_snowflake_connection
 
 
@@ -8,11 +10,12 @@ def get_operators() -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMOPERATOR_V"
+        query = "SELECT * FROM DIMOPERATOR_V"
         cur = conn.cursor()
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -26,11 +29,12 @@ def get_lines_of_business() -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMLINEOFBUSINESS_V"
+        query = "SELECT * FROM DIMLINEOFBUSINESS_V"
         cur = conn.cursor()
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -43,11 +47,12 @@ def get_branches() -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMBRANCH_V WHERE BRANCHID != -1"
+        query = "SELECT * FROM DIMBRANCH_V WHERE BRANCHID != -1"
         cur = conn.cursor()
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -62,7 +67,7 @@ def get_routes(branch: int = None) -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMROUTE_V"
+        query = "SELECT * FROM DIMROUTE_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -72,6 +77,7 @@ def get_routes(branch: int = None) -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -89,7 +95,7 @@ def get_customers(current: bool = False, branch: int = None) -> pandas.DataFrame
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMCUSTOMER_V"
+        query = "SELECT * FROM DIMCUSTOMER_V"
         conditions = []
         if current:
             conditions.append("CURRENTROWINDICATOR = 'Current'")
@@ -101,6 +107,7 @@ def get_customers(current: bool = False, branch: int = None) -> pandas.DataFrame
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -118,7 +125,7 @@ def get_locations(current: bool = False, customer: int = None) -> pandas.DataFra
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMLOCATION_V"
+        query = "SELECT * FROM DIMLOCATION_V"
         conditions = []
         if current:
             conditions.append("CURRENTROWINDICATOR = 'Current'")
@@ -130,6 +137,7 @@ def get_locations(current: bool = False, customer: int = None) -> pandas.DataFra
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -150,7 +158,7 @@ def get_machines(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMMACHINE_V"
+        query = "SELECT * FROM DIMMACHINE_V"
         conditions = []
         if current:
             conditions.append("CURRENTROWINDICATOR = 'Current'")
@@ -164,6 +172,7 @@ def get_machines(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -187,7 +196,7 @@ def get_coils(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMMACHINEPLANOGRAMCOIL_V"
+        query = "SELECT * FROM DIMMACHINEPLANOGRAMCOIL_V"
         conditions = []
         if current:
             conditions.append("CURRENTROWINDICATOR = 'Current'")
@@ -201,6 +210,7 @@ def get_coils(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -223,7 +233,7 @@ def get_micromarkets(
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMMICROMARKET_V"
+        query = "SELECT * FROM DIMMICROMARKET_V"
         conditions = []
         if current:
             conditions.append("CURRENTROWINDICATOR = 'Current'")
@@ -237,6 +247,7 @@ def get_micromarkets(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -249,11 +260,12 @@ def get_telemetry_devices() -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMDEVICE_V"
+        query = "SELECT * FROM DIMDEVICE_V"
         cur = conn.cursor()
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -268,7 +280,7 @@ def get_items(current: bool = False) -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMITEM_V"
+        query = "SELECT * FROM DIMITEM_V"
         conditions = []
         if current:
             conditions.append("CURRENTROWINDICATOR = 'Current'")
@@ -278,6 +290,7 @@ def get_items(current: bool = False) -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -292,7 +305,7 @@ def get_item_packs(item: int = None) -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMITEMPACK_V"
+        query = "SELECT * FROM DIMITEMPACK_V"
         conditions = []
         if item:
             conditions.append(f"ITEMKEY = {item}")
@@ -302,6 +315,7 @@ def get_item_packs(item: int = None) -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -317,7 +331,7 @@ def get_item_pack_barcodes(item: int = None, item_pack: int = None) -> pandas.Da
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMITEMPACKBARCODE_V"
+        query = "SELECT * FROM DIMITEMPACKBARCODE_V"
         conditions = []
         if item:
             conditions.append(f"ITEMKEY = {item}")
@@ -329,6 +343,7 @@ def get_item_pack_barcodes(item: int = None, item_pack: int = None) -> pandas.Da
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -341,11 +356,12 @@ def get_suppliers() -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMSUPPLIER_V"
+        query = "SELECT * FROM DIMSUPPLIER_V"
         cur = conn.cursor()
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -358,11 +374,12 @@ def get_supplier_branch() -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMSUPPLIERBRANCH_V"
+        query = "SELECT * FROM DIMSUPPLIERBRANCH_V"
         cur = conn.cursor()
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -376,11 +393,12 @@ def get_supplier_items() -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMSUPPLIERITEM_V"
+        query = "SELECT * FROM DIMSUPPLIERITEM_V"
         cur = conn.cursor()
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
@@ -395,7 +413,7 @@ def get_warehouses(branch: int = None) -> pandas.DataFrame:
     """
     conn = _get_snowflake_connection()
     try:
-        query = f"SELECT * FROM DIMWAREHOUSE_V"
+        query = "SELECT * FROM DIMWAREHOUSE_V"
         conditions = []
         if branch:
             conditions.append(f"BRANCHKEY = {branch}")
@@ -405,6 +423,7 @@ def get_warehouses(branch: int = None) -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
+        logger.error("Error reading Snowflake table", e)
         raise Exception("Error reading Snowflake table", e)
     finally:
         conn.close()
