@@ -26,7 +26,11 @@ from clope._logger import logger
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=1, min=4, max=10),
     retry=retry_if_exception_type(
-        (requests.exceptions.ConnectionError, requests.exceptions.Timeout)
+        (
+            requests.exceptions.ConnectionError,
+            requests.exceptions.Timeout,
+            requests.exceptions.RequestException,
+        )
     ),
     before=before_log(logger, logging.INFO),
     after=after_log(logger, logging.INFO),
@@ -66,12 +70,10 @@ def run_report(
         logger.error(
             f"Error, could not run report: {e.response.status_code} - {e.response.content}"
         )
-        raise Exception(
-            f"Error, could not run report: {e.response.status_code} - {e.response.content}"
-        )
+        raise
     except requests.exceptions.RequestException as e:
         logger.error(f"Error, could not run report: {e}")
-        raise Exception(f"Error, could not run report: {e}")
+        raise
 
     excel_data = response.content
 
