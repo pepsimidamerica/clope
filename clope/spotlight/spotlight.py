@@ -53,16 +53,16 @@ def run_report(
     if "CLO_PASSWORD" not in os.environ:
         raise Exception("CLO_PASSWORD environment variable not set")
 
-    if params is None:
-        params = []
-    params.append(("ReportId", report_id))
+    # Create a copy of the params list to avoid modifying the original during retries
+    current_params = list(params) if params is not None else []
+    current_params.append(("ReportId", report_id))
 
     try:
         response = requests.get(
             os.environ.get("CLO_BASE_URL", "https://api.mycantaloupe.com")
             + "/Reports/Run",
             auth=(os.environ["CLO_USERNAME"], os.environ["CLO_PASSWORD"]),
-            params=params,
+            params=current_params,
             timeout=600,
         )
         response.raise_for_status()
