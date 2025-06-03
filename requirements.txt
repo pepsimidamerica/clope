@@ -1,3 +1,5 @@
+aiofiles
+aiohttp
 requests
 pandas
 pyarrow
