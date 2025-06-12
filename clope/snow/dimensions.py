@@ -1,7 +1,9 @@
-import pandas
+import logging
 
-from clope._logger import logger
+import pandas
 from clope.snow.connection_handling import _get_snowflake_connection
+
+logger = logging.getLogger(__name__)
 
 
 def get_operators() -> pandas.DataFrame:
@@ -59,7 +61,7 @@ def get_branches() -> pandas.DataFrame:
     return df
 
 
-def get_routes(branch: int = None) -> pandas.DataFrame:
+def get_routes(branch: int | None = None) -> pandas.DataFrame:
     """
     Get list of routes.
 
@@ -84,7 +86,7 @@ def get_routes(branch: int = None) -> pandas.DataFrame:
     return df
 
 
-def get_customers(current: bool = False, branch: int = None) -> pandas.DataFrame:
+def get_customers(current: bool = False, branch: int | None = None) -> pandas.DataFrame:
     """
     Get list of customers.
     Implements SCD Type 2, so use current=True to get only current rows of
@@ -114,7 +116,9 @@ def get_customers(current: bool = False, branch: int = None) -> pandas.DataFrame
     return df
 
 
-def get_locations(current: bool = False, customer: int = None) -> pandas.DataFrame:
+def get_locations(
+    current: bool = False, customer: int | None = None
+) -> pandas.DataFrame:
     """
     Get list of locations.
     Implements SCD Type 2, so use current=True to get only current rows of
@@ -145,7 +149,7 @@ def get_locations(current: bool = False, customer: int = None) -> pandas.DataFra
 
 
 def get_machines(
-    current: bool = False, location: int = None, route: int = None
+    current: bool = False, location: int | None = None, route: int | None = None
 ) -> pandas.DataFrame:
     """
     Get list of machines.
@@ -181,8 +185,8 @@ def get_machines(
 
 def get_coils(
     current: bool = False,
-    machine: int = None,
-    item: int = None,
+    machine: int | None = None,
+    item: int | None = None,
 ) -> pandas.DataFrame:
     """
     Get list of coils. I.E. every coil in every machine planogram.
@@ -219,8 +223,8 @@ def get_coils(
 
 def get_micromarkets(
     current: bool = False,
-    location: int = None,
-    route: int = None,
+    location: int | None = None,
+    route: int | None = None,
 ) -> pandas.DataFrame:
     """
     Get list of micromarkets.
@@ -297,7 +301,7 @@ def get_items(current: bool = False) -> pandas.DataFrame:
     return df
 
 
-def get_item_packs(item: int = None) -> pandas.DataFrame:
+def get_item_packs(item: int | None = None) -> pandas.DataFrame:
     """
     Get list of item packs.
 
@@ -322,7 +326,9 @@ def get_item_packs(item: int = None) -> pandas.DataFrame:
     return df
 
 
-def get_item_pack_barcodes(item: int = None, item_pack: int = None) -> pandas.DataFrame:
+def get_item_pack_barcodes(
+    item: int | None = None, item_pack: int | None = None
+) -> pandas.DataFrame:
     """
     Get list of item pack barcodes.
 
@@ -405,7 +411,7 @@ def get_supplier_items() -> pandas.DataFrame:
     return df
 
 
-def get_warehouses(branch: int = None) -> pandas.DataFrame:
+def get_warehouses(branch: int | None = None) -> pandas.DataFrame:
     """
     Get list of warehouses.
 

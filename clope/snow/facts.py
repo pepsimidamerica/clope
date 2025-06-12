@@ -1,18 +1,19 @@
+import logging
 from datetime import datetime
 
 import pandas
-
-from clope._logger import logger
 from clope.snow.connection_handling import _get_snowflake_connection
+
+logger = logging.getLogger(__name__)
 
 
 def get_cashless_vending_transaction_fact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    machine: int = None,
-    item: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    machine: int | None = None,
+    item: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact is about the money related to a transaction.
@@ -57,14 +58,14 @@ def get_cashless_vending_transaction_fact(
 
 
 def get_collection_fact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    machine: int = None,
-    micro_market: int = None,
-    route: int = None,
-    line_of_business: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    machine: int | None = None,
+    micro_market: int | None = None,
+    route: int | None = None,
+    line_of_business: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact is about the collection of money at a vend visit.
@@ -115,13 +116,13 @@ def get_collection_fact(
 
 
 def get_micromarket_salesfact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    machine: int = None,
-    micro_market: int = None,
-    item: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    machine: int | None = None,
+    micro_market: int | None = None,
+    item: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact is about the sales of items at a micromarket.
@@ -168,14 +169,14 @@ def get_micromarket_salesfact(
 
 
 def get_order_fulfillment_delivery_fact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    line_of_business: int = None,
-    machine: int = None,
-    item: int = None,
-    item_pack: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    line_of_business: int | None = None,
+    machine: int | None = None,
+    item: int | None = None,
+    item_pack: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact tracks orders from the intial creation to delivery
@@ -229,14 +230,14 @@ def get_order_fulfillment_delivery_fact(
 
 
 def get_order_fulfillment_vending_market_fact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    machine: int = None,
-    line_of_business: int = None,
-    micro_market: int = None,
-    item: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    machine: int | None = None,
+    line_of_business: int | None = None,
+    micro_market: int | None = None,
+    item: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact illustrates the flow of product from prepick to delivery
@@ -287,13 +288,13 @@ def get_order_fulfillment_vending_market_fact(
 
 
 def get_delivery_order_receipt_fact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    machine: int = None,
-    item: int = None,
-    item_pack: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    machine: int | None = None,
+    item: int | None = None,
+    item_pack: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This face returns information on the receipt of a delivery order and
@@ -341,16 +342,16 @@ def get_delivery_order_receipt_fact(
 
 
 def get_sales_revenue_by_day_fact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    machine: int = None,
-    item: int = None,
-    item_pack: int = None,
-    route: int = None,
-    line_of_business: int = None,
-    micro_market: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    machine: int | None = None,
+    item: int | None = None,
+    item_pack: int | None = None,
+    route: int | None = None,
+    line_of_business: int | None = None,
+    micro_market: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     First version of this fact. Provides sales revenue by day.
@@ -412,16 +413,16 @@ def get_sales_revenue_by_day_fact(
 
 
 def get_sales_revenue_by_visit_fact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    machine: int = None,
-    item: int = None,
-    item_pack: int = None,
-    route: int = None,
-    line_of_business: int = None,
-    micro_market: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    machine: int | None = None,
+    item: int | None = None,
+    item_pack: int | None = None,
+    route: int | None = None,
+    line_of_business: int | None = None,
+    micro_market: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact provides sales revenue by visit.
@@ -479,15 +480,15 @@ def get_sales_revenue_by_visit_fact(
 
 
 def get_sales_by_coil(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    line_of_business: int = None,
-    machine: int = None,
-    item: int = None,
-    micro_market: int = None,
-    coil: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    line_of_business: int | None = None,
+    machine: int | None = None,
+    item: int | None = None,
+    micro_market: int | None = None,
+    coil: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact provides sales by coil for each day.
@@ -540,14 +541,14 @@ def get_sales_by_coil(
 
 
 def get_scheduling_machine_fact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    line_of_business: int = None,
-    machine: int = None,
-    micro_market: int = None,
-    route: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    line_of_business: int | None = None,
+    machine: int | None = None,
+    micro_market: int | None = None,
+    route: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact provides information on the scheduling of machines, what caused
@@ -598,10 +599,10 @@ def get_scheduling_machine_fact(
 
 
 def get_scheduling_route_summary_fact(
-    branch: int = None,
-    route: int = None,
-    line_of_business: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    route: int | None = None,
+    line_of_business: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact is a roll-up view of the statistics associated with schedules.
@@ -639,11 +640,11 @@ def get_scheduling_route_summary_fact(
 
 
 def get_telemetry_sales_fact(
-    location: int = None,
-    machine: int = None,
-    device: int = None,
-    item: int = None,
-    date_range: tuple[int, int] = None,
+    location: int | None = None,
+    machine: int | None = None,
+    device: int | None = None,
+    item: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact shows the sales reported on each product at each call from a
@@ -686,15 +687,15 @@ def get_telemetry_sales_fact(
 
 
 def get_vending_micromarket_visit_item_fact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    machine: int = None,
-    route: int = None,
-    line_of_business: int = None,
-    micro_market: int = None,
-    item: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    machine: int | None = None,
+    route: int | None = None,
+    line_of_business: int | None = None,
+    micro_market: int | None = None,
+    item: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact provides the item level inventory and delivery information
@@ -748,11 +749,11 @@ def get_vending_micromarket_visit_item_fact(
 
 
 def get_warehouse_inventory_fact(
-    branch: int = None,
-    warehouse: int = None,
-    item: int = None,
-    item_pack: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    warehouse: int | None = None,
+    item: int | None = None,
+    item_pack: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact provides a view of the start of day inventory for each warehouse.
@@ -793,11 +794,11 @@ def get_warehouse_inventory_fact(
 
 
 def get_warehouse_observed_inventory_fact(
-    branch: int = None,
-    warehouse: int = None,
-    item: int = None,
-    item_pack: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    warehouse: int | None = None,
+    item: int | None = None,
+    item_pack: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact provides the view of the observed inventories that were captured.
@@ -838,12 +839,12 @@ def get_warehouse_observed_inventory_fact(
 
 
 def get_warehouse_prod_movement_fact(
-    branch: int = None,
-    from_warehouse: int = None,
-    to_warehouse: int = None,
-    item: int = None,
-    item_pack: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    from_warehouse: int | None = None,
+    to_warehouse: int | None = None,
+    item: int | None = None,
+    item_pack: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact is for reporting on all product movements.
@@ -887,12 +888,12 @@ def get_warehouse_prod_movement_fact(
 
 
 def get_warehouse_purchase_fact(
-    branch: int = None,
-    warehouse: int = None,
-    item: int = None,
-    item_pack: int = None,
-    supplier: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    warehouse: int | None = None,
+    item: int | None = None,
+    item_pack: int | None = None,
+    supplier: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact provides the view of the purchases made by the warehouse.
@@ -936,12 +937,12 @@ def get_warehouse_purchase_fact(
 
 
 def get_warehouse_receive_fact(
-    branch: int = None,
-    warehouse: int = None,
-    item: int = None,
-    item_pack: int = None,
-    supplier: int = None,
-    date_range: tuple[int, int] = None,
+    branch: int | None = None,
+    warehouse: int | None = None,
+    item: int | None = None,
+    item_pack: int | None = None,
+    supplier: int | None = None,
+    date_range: tuple[int, int] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact provides info about what was received by the warehouse.
@@ -985,13 +986,13 @@ def get_warehouse_receive_fact(
 
 
 def get_machine_alerts_fact(
-    branch: int = None,
-    customer: int = None,
-    location: int = None,
-    machine: int = None,
-    micro_market: int = None,
-    effective_date_range: tuple[int, int] = None,
-    added_date_range: tuple[datetime, datetime] = None,
+    branch: int | None = None,
+    customer: int | None = None,
+    location: int | None = None,
+    machine: int | None = None,
+    micro_market: int | None = None,
+    effective_date_range: tuple[int, int] | None = None,
+    added_date_range: tuple[datetime, datetime] | None = None,
 ) -> pandas.DataFrame:
     """
     This fact contains info on machine alerts that Cantaloupe has raised.

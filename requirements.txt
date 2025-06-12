@@ -1,8 +1,0 @@
-aiofiles
-aiohttp
-requests
-pandas
-pyarrow
-openpyxl
-snowflake-connector-python[pandas]
-tenacity

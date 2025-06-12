@@ -12,7 +12,6 @@ import aiofiles
 import aiohttp
 import pandas
 import requests
-from clope._logger import logger
 from tenacity import (
     after_log,
     before_log,
@@ -21,6 +20,8 @@ from tenacity import (
     stop_after_attempt,
     wait_exponential,
 )
+
+logger = logging.getLogger(__name__)
 
 
 @retry(
@@ -37,7 +38,9 @@ from tenacity import (
     after=after_log(logger, logging.INFO),
 )
 def run_report(
-    report_id: str, params: List[Tuple[str, str]] = None, dtype: dict = None
+    report_id: str,
+    params: List[Tuple[str, str]] | None = None,
+    dtype: dict | None = None,
 ) -> pandas.DataFrame:
     """
     Send GET request to Cantaloupe API to run report and receive excel file data.
@@ -141,7 +144,9 @@ def _handle_temp_file(report_id: str):
     after=after_log(logger, logging.INFO),
 )
 async def async_run_report(
-    report_id: str, params: List[Tuple[str, str]] = None, dtype: dict = None
+    report_id: str,
+    params: List[Tuple[str, str]] | None = None,
+    dtype: dict | None = None,
 ) -> pandas.DataFrame:
     """
     Asynchronous version of run_report.

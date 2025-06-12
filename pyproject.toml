@@ -1,0 +1,37 @@
+[project]
+name = "clope"
+version = "0.2.0"
+description = "Python package for interacting with the Cantaloupe/Seed vending system. Primarily the Spotlight API."
+readme = "README.md"
+authors = [{ name = "Jordan Maynor", email = "jmaynor@pepsimidamerica.com" }]
+requires-python = ">=3.12"
+dependencies = [
+    "aiofiles",
+    "aiohttp",
+    "openpyxl",
+    "pandas",
+    "pyarrow",
+    "requests",
+    "snowflake-connector-python[pandas]",
+    "tenacity",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: The Unlicense (Unlicense)",
+    "Operating System :: OS Independent",
+]
+license = { file = "LICENSE" }
+
+[project.scripts]
+clope = "clope:main"
+
+[project.urls]
+Homepage = "https://github.com/pepsimidamerica/clope"
+
+[build-system]
+requires = ["uv_build>=0.7.7,<0.8"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "clope"
+module-root = ""
