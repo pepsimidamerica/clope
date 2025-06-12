@@ -22,9 +22,6 @@ classifiers = [
 ]
 license = { file = "LICENSE" }
 
-[project.scripts]
-clope = "clope:main"
-
 [project.urls]
 Homepage = "https://github.com/pepsimidamerica/clope"
 
