@@ -44,7 +44,7 @@ Example call
 
 ```python
 # Import package
-from clope import run_report
+from clope.spotlight import run_report
 
 # Run report with a report_id and additional parameters
 df_report = run_report('123', [('filter0', '2024-01-01'), ('filter0', '2024-01-31')])
