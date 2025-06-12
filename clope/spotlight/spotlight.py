@@ -2,13 +2,10 @@
 Module contains a function for interacting with the Cantaloupe Spotlight API.
 """
 
+import io
 import logging
 import os
-import shutil
-from datetime import datetime
-from typing import List, Tuple
 
-import aiofiles
 import aiohttp
 import pandas
 import requests
@@ -39,7 +36,7 @@ logger = logging.getLogger(__name__)
 )
 def run_report(
     report_id: str,
-    params: List[Tuple[str, str]] | None = None,
+    params: list[tuple[str, str]] | None = None,
     dtype: dict | None = None,
 ) -> pandas.DataFrame:
     """
@@ -70,6 +67,7 @@ def run_report(
             timeout=600,
         )
         response.raise_for_status()
+        excel_data = response.content
     except requests.exceptions.HTTPError as e:
         logger.error(
             f"Error, could not run report: {e.response.status_code} - {e.response.content}"
@@ -79,54 +77,14 @@ def run_report(
         logger.error(f"Error, could not run report: {e}")
         raise
 
-    excel_data = response.content
-
     try:
-        # Save temp excel file to local directory
-        with open(f"report{report_id}.xlsx", "wb") as f:
-            f.write(excel_data)
-    except Exception as e:
-        logger.error(f"Error saving excel file: {e}")
-        raise Exception(f"Error saving excel file {e}")
-
-    try:
-        report_df = pandas.read_excel(
-            f"report{report_id}.xlsx", sheet_name="Report", dtype=dtype
-        )
+        buf = io.BytesIO(excel_data)
+        report_df = pandas.read_excel(buf, sheet_name="Report", dtype=dtype)
     except Exception as e:
         logger.error(f"Error reading excel file: {e}")
         raise Exception(f"Error reading excel file: {e}")
 
-    # Delete temp excel file
-    if len(report_df) > 0:
-        _handle_temp_file(report_id)
-
     return report_df
-
-
-def _handle_temp_file(report_id: str):
-    """
-    Helper function that gets called after the report is run.
-    """
-    if os.environ.get("CLO_ARCHIVE_FILES", "false").lower() == "true":
-        try:
-            new_dir = os.path.join(
-                os.getcwd(), "Archive", datetime.now().strftime("%Y-%m-%d")
-            )
-            os.makedirs(new_dir, exist_ok=True)
-            shutil.move(
-                f"report{report_id}.xlsx",
-                os.path.join(new_dir, f"report{report_id}.xlsx"),
-            )
-        except Exception as e:
-            logger.error(f"Error moving excel file: {e}")
-            raise Exception("Error moving excel file", e)
-    else:
-        try:
-            os.remove(f"report{report_id}.xlsx")
-        except Exception as e:
-            logger.error(f"Error deleting excel file: {e}")
-            raise Exception("Error deleting excel file", e)
 
 
 @retry(
@@ -145,7 +103,7 @@ def _handle_temp_file(report_id: str):
 )
 async def async_run_report(
     report_id: str,
-    params: List[Tuple[str, str]] | None = None,
+    params: list[tuple[str, str]] | None = None,
     dtype: dict | None = None,
 ) -> pandas.DataFrame:
     """
@@ -186,49 +144,10 @@ async def async_run_report(
             raise
 
     try:
-        # Save temp excel file to local directory asynchronously
-        async with aiofiles.open(f"report{report_id}.xlsx", "wb") as f:
-            await f.write(excel_data)
-    except Exception as e:
-        logger.error(f"Error saving excel file: {e}")
-        raise Exception(f"Error saving excel file {e}")
-
-    try:
-        # Read the Excel file asynchronously
-        report_df = pandas.read_excel(
-            f"report{report_id}.xlsx", sheet_name="Report", dtype=dtype
-        )
+        buf = io.BytesIO(excel_data)
+        report_df = pandas.read_excel(buf, sheet_name="Report", dtype=dtype)
     except Exception as e:
         logger.error(f"Error reading excel file: {e}")
         raise Exception(f"Error reading excel file: {e}")
 
-    # Delete temp excel file asynchronously
-    if len(report_df) > 0:
-        await _async_handle_temp_file(report_id)
-
     return report_df
-
-
-async def _async_handle_temp_file(report_id: str):
-    """
-    Helper function for handling temp files asynchronously.
-    """
-    if os.environ.get("CLO_ARCHIVE_FILES", "false").lower() == "true":
-        try:
-            new_dir = os.path.join(
-                os.getcwd(), "Archive", datetime.now().strftime("%Y-%m-%d")
-            )
-            os.makedirs(new_dir, exist_ok=True)
-            shutil.move(
-                f"report{report_id}.xlsx",
-                os.path.join(new_dir, f"report{report_id}.xlsx"),
-            )
-        except Exception as e:
-            logger.error(f"Error moving excel file: {e}")
-            raise Exception("Error moving excel file", e)
-    else:
-        try:
-            os.remove(f"report{report_id}.xlsx")
-        except Exception as e:
-            logger.error(f"Error deleting excel file: {e}")
-            raise Exception("Error deleting excel file", e)

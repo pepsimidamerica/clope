@@ -15,7 +15,6 @@ Several environment variables are required for clope to function. Functionality 
 | Spotlight | Yes       | CLO_USERNAME | Username of the Spotlight API user. Should be provided by Cantaloupe. |
 | Spotlight | Yes       | CLO_PASSWORD | Password of the Spotlight API user. Should be provided by Cantaloupe. |
 | Spotlight | No        | CLO_BASE_URL | Not actually sure if this varies between clients. I have this as an optional variable in case it does. Default value if no env variable is <https://api.mycantaloupe.com>, otherwise can be overridden. |
-| Spotlight | No        | CLO_ARCHIVE_FILES | Optional variable. Will archive the interim excel files that run_report() generates so can be later looked at in the Archive folder. Default behavior is to not archive and simply delete the excel files after data is pulled from them. |
 | Snowflake | Yes | SNOWFLAKE_USER | Username of the Snowflake user |
 | Snowflake | Yes | SNOWFLAKE_PASSWORD | Password of the snowflake user |
 | Snowflake | Yes | SNOWFLAKE_ACCOUNT | Snowflake account you're connecting to. Should be something along the lines of "{Cantaloupe account}-{Your Company Name}" |
