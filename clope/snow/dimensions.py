@@ -1,3 +1,10 @@
+"""
+This module provides functions for pulling info from the dimension tables in snowflake.
+Dimensions are reference tables that provide context for the facts. They change
+over time, so most implement SCD Type 2, meaning they have a current row indicator
+and a start and end date to indicate when the row was current.
+"""
+
 import logging
 
 import pandas

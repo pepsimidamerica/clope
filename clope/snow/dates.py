@@ -10,8 +10,6 @@ from datetime import datetime, timedelta
 
 import pandas
 
-# from connection_handling import _get_snowflake_connection
-
 
 def datekey_to_date(datekey: int) -> datetime:
     """

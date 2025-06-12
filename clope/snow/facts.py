@@ -1,3 +1,9 @@
+"""
+This module provides functions for pulling info from the fact tables in snowflake.
+Facts generally represent a single event or transaction in the system, they
+are unchanging.
+"""
+
 import logging
 from datetime import datetime
 
