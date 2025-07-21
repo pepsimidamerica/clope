@@ -11,7 +11,7 @@ dependencies = [
     "pandas",
     "pyarrow",
     "requests",
-    "snowflake-connector-python[pandas]",
+    "snowflake-connector-python[pandas]>=3.16.0,<3.17.0",
     "tenacity",
 ]
 classifiers = [
