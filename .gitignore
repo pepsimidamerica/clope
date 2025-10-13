@@ -152,3 +152,5 @@ cython_debug/
 #.idea/
 
 Archive/
+*.p8
+*.pub

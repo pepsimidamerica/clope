@@ -12,7 +12,9 @@ def _get_snowflake_connection(
     """
     for env in [
         "SNOWFLAKE_USER",
-        "SNOWFLAKE_PASSWORD",
+        # "SNOWFLAKE_PASSWORD",
+        "SNOWFLAKE_PRIVATE_KEY_FILE",
+        "SNOWFLAKE_PRIVATE_KEY_FILE_PWD",
         "SNOWFLAKE_ACCOUNT",
         "SNOWFLAKE_WAREHOUSE",
         "SNOWFLAKE_DATABASE",
@@ -22,9 +24,12 @@ def _get_snowflake_connection(
 
     # TODO Need to change to private key auth over password
     conn = snowflake.connector.connect(
-        user=os.environ["SNOWFLAKE_USER"],
-        password=os.environ["SNOWFLAKE_PASSWORD"],
         account=os.environ["SNOWFLAKE_ACCOUNT"],
+        user=os.environ["SNOWFLAKE_USER"],
+        # password=os.environ["SNOWFLAKE_PASSWORD"],
+        authenticator="SNOWFLAKE_JWT",
+        private_key_file=os.environ["SNOWFLAKE_PRIVATE_KEY_FILE"],
+        private_key_file_pwd=os.environ["SNOWFLAKE_PRIVATE_KEY_FILE_PWD"],
         warehouse=os.environ["SNOWFLAKE_WAREHOUSE"],
         database=os.environ["SNOWFLAKE_DATABASE"],
         schema=schema,

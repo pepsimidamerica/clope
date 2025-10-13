@@ -16,7 +16,8 @@ Several environment variables are required for clope to function. Functionality 
 | Spotlight | Yes       | CLO_PASSWORD | Password of the Spotlight API user. Should be provided by Cantaloupe. |
 | Spotlight | No        | CLO_BASE_URL | Not actually sure if this varies between clients. I have this as an optional variable in case it does. Default value if no env variable is <https://api.mycantaloupe.com>, otherwise can be overridden. |
 | Snowflake | Yes | SNOWFLAKE_USER | Username of the Snowflake user |
-| Snowflake | Yes | SNOWFLAKE_PASSWORD | Password of the snowflake user |
+| Snowflake | Yes | SNOWFLAKE_PRIVATE_KEY_FILE | Path pointing to the private key file for the Snowflake user. |
+| Snowflake | Yes | SNOWFLAKE_PRIVATE_KEY_FILE_PWD | Password for the private key file |
 | Snowflake | Yes | SNOWFLAKE_ACCOUNT | Snowflake account you're connecting to. Should be something along the lines of "{Cantaloupe account}-{Your Company Name}" |
 | Snowflake | Yes | SNOWFLAKE_DATABASE | Snowflake database to connect to. Likely begins with "PRD_SEED...". |
 
@@ -57,6 +58,8 @@ Cantaloupe also offers a data warehouse product in Snowflake. Good for aggregati
 Also something to keep in mind is that the system makes use of SCD (slowly changing dimension) in order to keep track of historical info vs current info. So some care should be taken when interpreting the data.
 
 For each dataset that uses SCD, a parameter has been included to restrict to current data only or include all data.
+
+Authentication to Snowflake is handled via [key-pair authentication](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-connect#using-key-pair-authentication-and-key-pair-rotation). You'll need to create a key pair using openssl and set the snowflake user's RSA_PUBLIC_KEY.
 
 ### Dates
 
