@@ -9,7 +9,6 @@ dependencies = [
     "aiohttp",
     "openpyxl",
     "pandas",
-    "pyarrow",
     "requests",
     "snowflake-connector-python[pandas]>=4.0.0",
     "tenacity",

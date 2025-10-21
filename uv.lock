@@ -199,13 +199,12 @@ wheels = [
 
 [[package]]
 name = "clope"
-version = "0.2.0"
+version = "0.2.1"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
     { name = "openpyxl" },
     { name = "pandas" },
-    { name = "pyarrow" },
     { name = "requests" },
     { name = "snowflake-connector-python", extra = ["pandas"] },
     { name = "tenacity" },
@@ -221,7 +220,6 @@ requires-dist = [
     { name = "aiohttp" },
     { name = "openpyxl" },
     { name = "pandas" },
-    { name = "pyarrow" },
     { name = "requests" },
     { name = "snowflake-connector-python", extras = ["pandas"], specifier = ">=4.0.0" },
     { name = "tenacity" },
