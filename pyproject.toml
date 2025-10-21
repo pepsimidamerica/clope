@@ -1,6 +1,6 @@
 [project]
 name = "clope"
-version = "0.2.1"
+version = "0.2.2"
 description = "Python package for interacting with the Cantaloupe/Seed vending system. Primarily the Spotlight API."
 readme = "README.md"
 authors = [{ name = "Jordan Maynor", email = "jmaynor@pepsimidamerica.com" }]
