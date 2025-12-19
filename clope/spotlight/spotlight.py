@@ -45,8 +45,13 @@ def run_report(
     Returns a pandas dataframe of the report data.
 
     :param report_id: The ID of the report to run.
+    :type report_id: str
     :param params: A list of tuples to pass as parameters in the GET request. Usually date ranges.
+    :type params: list[tuple[str, str]] | None
     :param dtype: Dictionary of column names and data types to cast columns to.
+    :type dtype: dict | None
+    :return: pandas DataFrame containing the report data.
+    :rtype: pandas.DataFrame
     """
     # Check for environment variables
     if "CLO_USERNAME" not in os.environ:
@@ -113,8 +118,13 @@ async def async_run_report(
     Returns a pandas dataframe of the report data.
 
     :param report_id: The ID of the report to run.
+    :type report_id: str
     :param params: A list of tuples to pass as parameters in the GET request. Usually date ranges.
+    :type params: list[tuple[str, str]] | None
     :param dtype: Dictionary of column names and data types to cast columns to.
+    :type dtype: dict | None
+    :return: pandas DataFrame containing the report data.
+    :rtype: pandas.DataFrame
     """
     # Check for environment variables
     if "CLO_USERNAME" not in os.environ:

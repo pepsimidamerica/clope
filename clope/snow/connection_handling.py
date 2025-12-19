@@ -22,7 +22,6 @@ def _get_snowflake_connection(
         if env not in os.environ:
             raise Exception(f"Missing required environment variable: {env}")
 
-    # TODO Need to change to private key auth over password
     conn = snowflake.connector.connect(
         account=os.environ["SNOWFLAKE_ACCOUNT"],
         user=os.environ["SNOWFLAKE_USER"],
