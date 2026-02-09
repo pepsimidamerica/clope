@@ -24,7 +24,7 @@ license = { file = "LICENSE" }
 Homepage = "https://github.com/pepsimidamerica/clope"
 
 [build-system]
-requires = ["uv_build>=0.9.4,<0.10.0"]
+requires = ["uv_build>=0.9.4,<0.11.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
