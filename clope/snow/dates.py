@@ -8,7 +8,7 @@ Should be much quicker.
 
 from datetime import datetime, timedelta
 
-import pandas
+import pandas as pd
 
 
 def datekey_to_date(datekey: int) -> datetime:
@@ -31,7 +31,7 @@ def get_datekey_range(start_date: datetime, end_date: datetime) -> list[int]:
     """
     Get a list of datekeys between two dates.
     """
-    return [date_to_datekey(x) for x in pandas.date_range(start_date, end_date)]
+    return [date_to_datekey(x) for x in pd.date_range(start_date, end_date)]
 
 
 def get_date_range(start_datekey: int, end_datekey: int) -> list[datetime]:
@@ -93,7 +93,7 @@ def date_to_yearkey(date: datetime) -> int:
 # Commented out in-progress code
 # def date_dim(
 #     datekey: int | None = None, date: datetime | None = None
-# ) -> pandas.DataFrame:
+# ) -> pd.DataFrame:
 #     """
 #     Retrieve corresponding datekey from a given date or vice versa.
 #     """
@@ -110,7 +110,7 @@ def date_to_yearkey(date: datetime) -> int:
 #             query = f"SELECT * FROM DATE_DIM WHERE DATE = '{date}'"
 #         cur = conn.cursor()
 #         cur.execute(query)
-#         df = cur.fetch_pandas_all()
+#         df = cur.fetch_pd_all()
 #     except Exception as e:
 #         raise Exception("Error reading Snowflake table", e)
 #     finally:

@@ -1,3 +1,7 @@
+"""
+Module used to handle setting up connection to Snowflake using private key authentication.
+"""
+
 import os
 
 import snowflake.connector
@@ -20,7 +24,7 @@ def _get_snowflake_connection(
         "SNOWFLAKE_DATABASE",
     ]:
         if env not in os.environ:
-            raise Exception(f"Missing required environment variable: {env}")
+            raise OSError(f"Missing required environment variable: {env}")
 
     conn = snowflake.connector.connect(
         account=os.environ["SNOWFLAKE_ACCOUNT"],

@@ -7,7 +7,7 @@ import logging
 import os
 
 import aiohttp
-import pandas
+import pandas as pd
 import requests
 from tenacity import (
     after_log,
@@ -38,11 +38,11 @@ def run_report(
     report_id: str,
     params: list[tuple[str, str]] | None = None,
     dtype: dict | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     Send GET request to Cantaloupe API to run report and receive excel file data.
     Uses Basic authentication with username and password.
-    Returns a pandas dataframe of the report data.
+    Returns a pd dataframe of the report data.
 
     :param report_id: The ID of the report to run.
     :type report_id: str
@@ -50,14 +50,14 @@ def run_report(
     :type params: list[tuple[str, str]] | None
     :param dtype: Dictionary of column names and data types to cast columns to.
     :type dtype: dict | None
-    :return: pandas DataFrame containing the report data.
-    :rtype: pandas.DataFrame
+    :return: pd DataFrame containing the report data.
+    :rtype: pd.DataFrame
     """
     # Check for environment variables
     if "CLO_USERNAME" not in os.environ:
-        raise Exception("CLO_USERNAME environment variable not set")
+        raise OSError("CLO_USERNAME environment variable not set")
     if "CLO_PASSWORD" not in os.environ:
-        raise Exception("CLO_PASSWORD environment variable not set")
+        raise OSError("CLO_PASSWORD environment variable not set")
 
     # Create a copy of the params list to avoid modifying the original during retries
     current_params = list(params) if params is not None else []
@@ -84,10 +84,10 @@ def run_report(
 
     try:
         buf = io.BytesIO(excel_data)
-        report_df = pandas.read_excel(buf, sheet_name="Report", dtype=dtype)
+        report_df = pd.read_excel(buf, sheet_name="Report", dtype=dtype)
     except Exception as e:
         logger.error(f"Error reading excel file: {e}")
-        raise Exception(f"Error reading excel file: {e}")
+        raise Exception(f"Error reading excel file: {e}") from e
 
     return report_df
 
@@ -110,12 +110,12 @@ async def async_run_report(
     report_id: str,
     params: list[tuple[str, str]] | None = None,
     dtype: dict | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     Asynchronous version of run_report.
     Sends GET request to Cantaloupe API to run report and receive excel file data.
     Uses Basic authentication with username and password.
-    Returns a pandas dataframe of the report data.
+    Returns a pd dataframe of the report data.
 
     :param report_id: The ID of the report to run.
     :type report_id: str
@@ -123,14 +123,14 @@ async def async_run_report(
     :type params: list[tuple[str, str]] | None
     :param dtype: Dictionary of column names and data types to cast columns to.
     :type dtype: dict | None
-    :return: pandas DataFrame containing the report data.
-    :rtype: pandas.DataFrame
+    :return: pd DataFrame containing the report data.
+    :rtype: pd.DataFrame
     """
     # Check for environment variables
     if "CLO_USERNAME" not in os.environ:
-        raise Exception("CLO_USERNAME environment variable not set")
+        raise OSError("CLO_USERNAME environment variable not set")
     if "CLO_PASSWORD" not in os.environ:
-        raise Exception("CLO_PASSWORD environment variable not set")
+        raise OSError("CLO_PASSWORD environment variable not set")
 
     # Create a copy of the params list to avoid modifying the original during retries
     current_params = list(params) if params is not None else []
@@ -155,9 +155,9 @@ async def async_run_report(
 
     try:
         buf = io.BytesIO(excel_data)
-        report_df = pandas.read_excel(buf, sheet_name="Report", dtype=dtype)
+        report_df = pd.read_excel(buf, sheet_name="Report", dtype=dtype)
     except Exception as e:
         logger.error(f"Error reading excel file: {e}")
-        raise Exception(f"Error reading excel file: {e}")
+        raise Exception(f"Error reading excel file: {e}") from e
 
     return report_df

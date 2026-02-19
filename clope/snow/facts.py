@@ -7,7 +7,7 @@ are unchanging.
 import logging
 from datetime import datetime
 
-import pandas
+import pandas as pd
 from clope.snow.connection_handling import _get_snowflake_connection
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ def get_cashless_vending_transaction_fact(
     machine: int | None = None,
     item: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact is about the money related to a transaction.
     Pertains to vending and micromarkets lines of business only.
@@ -56,8 +56,8 @@ def get_cashless_vending_transaction_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -72,7 +72,7 @@ def get_collection_fact(
     route: int | None = None,
     line_of_business: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact is about the collection of money at a vend visit.
     Pertains to vending and micromarkets lines of business only.
@@ -114,8 +114,8 @@ def get_collection_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -129,7 +129,7 @@ def get_micromarket_salesfact(
     micro_market: int | None = None,
     item: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact is about the sales of items at a micromarket.
 
@@ -167,8 +167,8 @@ def get_micromarket_salesfact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -183,7 +183,7 @@ def get_order_fulfillment_delivery_fact(
     item: int | None = None,
     item_pack: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact tracks orders from the intial creation to delivery
     specifically providing details on order quantities at the time of order
@@ -228,8 +228,8 @@ def get_order_fulfillment_delivery_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -244,7 +244,7 @@ def get_order_fulfillment_vending_market_fact(
     micro_market: int | None = None,
     item: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact illustrates the flow of product from prepick to delivery
     for each vending machine and market section.
@@ -286,8 +286,8 @@ def get_order_fulfillment_vending_market_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -301,7 +301,7 @@ def get_delivery_order_receipt_fact(
     item: int | None = None,
     item_pack: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This face returns information on the receipt of a delivery order and
     the original order details.
@@ -340,8 +340,8 @@ def get_delivery_order_receipt_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -358,7 +358,7 @@ def get_sales_revenue_by_day_fact(
     line_of_business: int | None = None,
     micro_market: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     First version of this fact. Provides sales revenue by day.
     For delivery, this is revenue from deliveries made.
@@ -411,8 +411,8 @@ def get_sales_revenue_by_day_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -429,7 +429,7 @@ def get_sales_revenue_by_visit_fact(
     line_of_business: int | None = None,
     micro_market: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact provides sales revenue by visit.
     For delivery, this is revenue for the deliveries made.
@@ -478,8 +478,8 @@ def get_sales_revenue_by_visit_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -495,7 +495,7 @@ def get_sales_by_coil(
     micro_market: int | None = None,
     coil: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact provides sales by coil for each day.
 
@@ -539,8 +539,8 @@ def get_sales_by_coil(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -555,7 +555,7 @@ def get_scheduling_machine_fact(
     micro_market: int | None = None,
     route: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact provides information on the scheduling of machines, what caused
     it to be scheduled, whether the schedule was edited.
@@ -597,8 +597,8 @@ def get_scheduling_machine_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -609,7 +609,7 @@ def get_scheduling_route_summary_fact(
     route: int | None = None,
     line_of_business: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact is a roll-up view of the statistics associated with schedules.
 
@@ -638,8 +638,8 @@ def get_scheduling_route_summary_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -651,7 +651,7 @@ def get_telemetry_sales_fact(
     device: int | None = None,
     item: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact shows the sales reported on each product at each call from a
     telemeter from a vending machine.  All products associated with the
@@ -685,8 +685,8 @@ def get_telemetry_sales_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -702,7 +702,7 @@ def get_vending_micromarket_visit_item_fact(
     micro_market: int | None = None,
     item: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact provides the item level inventory and delivery information
     for replenishment visits for Vending and Micromarkets.
@@ -747,8 +747,8 @@ def get_vending_micromarket_visit_item_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -760,7 +760,7 @@ def get_warehouse_inventory_fact(
     item: int | None = None,
     item_pack: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact provides a view of the start of day inventory for each warehouse.
 
@@ -792,8 +792,8 @@ def get_warehouse_inventory_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -805,7 +805,7 @@ def get_warehouse_observed_inventory_fact(
     item: int | None = None,
     item_pack: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact provides the view of the observed inventories that were captured.
 
@@ -837,8 +837,8 @@ def get_warehouse_observed_inventory_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -851,7 +851,7 @@ def get_warehouse_prod_movement_fact(
     item: int | None = None,
     item_pack: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact is for reporting on all product movements.
 
@@ -886,8 +886,8 @@ def get_warehouse_prod_movement_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -900,7 +900,7 @@ def get_warehouse_purchase_fact(
     item_pack: int | None = None,
     supplier: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact provides the view of the purchases made by the warehouse.
 
@@ -935,8 +935,8 @@ def get_warehouse_purchase_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -949,7 +949,7 @@ def get_warehouse_receive_fact(
     item_pack: int | None = None,
     supplier: int | None = None,
     date_range: tuple[int, int] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact provides info about what was received by the warehouse.
 
@@ -984,8 +984,8 @@ def get_warehouse_receive_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -999,7 +999,7 @@ def get_machine_alerts_fact(
     micro_market: int | None = None,
     effective_date_range: tuple[int, int] | None = None,
     added_date_range: tuple[datetime, datetime] | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     This fact contains info on machine alerts that Cantaloupe has raised.
     Out of order, not dexing, etc.
@@ -1040,8 +1040,8 @@ def get_machine_alerts_fact(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df

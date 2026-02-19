@@ -4,11 +4,37 @@ clope (see-lope) is a Python package for interacting with the Cantaloupe/Seed ve
 
 ## Installation
 
+Base install (Spotlight only):
+
 `pip install clope`
+
+Install with Snowflake support:
+
+`pip install "clope[snow]"`
 
 ## Usage
 
 Several environment variables are required for clope to function. Functionality is divided into two modules, so vars are only required if you are using functions from that particular module.
+
+Quick start (Spotlight):
+
+```python
+from clope.spotlight import run_report
+
+df_report = run_report(
+ "123",
+ [("filter0", "2024-01-01"), ("filter1", "2024-01-31")],
+)
+```
+
+Quick start (Snowflake):
+
+```python
+from clope.snow import facts
+
+# Example: load a fact table (adjust function and params to your use case)
+df_sales = facts.get_sales_revenue_by_day_fact()
+```
 
 | Module | Required? | Env Variable | Description |
 | --------- | --------- | ------------ | ----------- |
@@ -23,7 +49,7 @@ Several environment variables are required for clope to function. Functionality 
 
 ## Spotlight
 
-The spotlight module invloves interaction with the Cantaloupe Spotlight API. The API essentially allows remotely run a spotlight report and getting the raw excel data via HTTP requests. Reports must be set up in the browser prior to using the API. Fairly quick and suited for getting data that needs to be up-to-date at that moment.
+The spotlight module involves interaction with the Cantaloupe Spotlight API. The API allows you to run a Spotlight report remotely and retrieve the raw Excel data via HTTP requests. Reports must be set up in the browser prior to using the API. This is quick and suited for getting data that needs to be up-to-date at that moment.
 
 ### Run Spotlight Report (run_report())
 
@@ -48,7 +74,7 @@ Example call
 from clope.spotlight import run_report
 
 # Run report with a report_id and additional parameters
-df_report = run_report('123', [('filter0', '2024-01-01'), ('filter0', '2024-01-31')])
+df_report = run_report("123", [("filter0", "2024-01-01"), ("filter1", "2024-01-31")])
 ```
 
 ## Snowflake

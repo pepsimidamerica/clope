@@ -1,18 +1,11 @@
 [project]
 name = "clope"
-version = "0.2.2"
+version = "0.2.3"
 description = "Python package for interacting with the Cantaloupe/Seed vending system. Primarily the Spotlight API."
 readme = "README.md"
 authors = [{ name = "Jordan Maynor", email = "jmaynor@pepsimidamerica.com" }]
 requires-python = ">=3.12"
-dependencies = [
-    "aiohttp",
-    "openpyxl",
-    "pandas",
-    "requests",
-    "snowflake-connector-python[pandas]>=4.0.0",
-    "tenacity",
-]
+dependencies = ["aiohttp", "openpyxl", "pandas", "requests", "tenacity"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: The Unlicense (Unlicense)",
@@ -33,3 +26,6 @@ module-root = ""
 
 [dependency-groups]
 dev = ["python-dotenv>=1.1.0"]
+
+[project.optional-dependencies]
+snow = ["snowflake-connector-python[pandas]>=4.0.0"]

@@ -7,13 +7,13 @@ and a start and end date to indicate when the row was current.
 
 import logging
 
-import pandas
+import pandas as pd
 from clope.snow.connection_handling import _get_snowflake_connection
 
 logger = logging.getLogger(__name__)
 
 
-def get_operators() -> pandas.DataFrame:
+def get_operators() -> pd.DataFrame:
     """
     Get list of Seed databases an operator uses. For most, will be 1.
     """
@@ -24,14 +24,14 @@ def get_operators() -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_lines_of_business() -> pandas.DataFrame:
+def get_lines_of_business() -> pd.DataFrame:
     """
     Reference table for the three lines of business.
     Delivery, Micromarket, and Vending
@@ -43,14 +43,14 @@ def get_lines_of_business() -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_branches() -> pandas.DataFrame:
+def get_branches() -> pd.DataFrame:
     """
     Get list of branches.
     """
@@ -61,14 +61,14 @@ def get_branches() -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_routes(branch: int | None = None) -> pandas.DataFrame:
+def get_routes(branch: int | None = None) -> pd.DataFrame:
     """
     Get list of routes.
 
@@ -86,14 +86,14 @@ def get_routes(branch: int | None = None) -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_customers(current: bool = False, branch: int | None = None) -> pandas.DataFrame:
+def get_customers(current: bool = False, branch: int | None = None) -> pd.DataFrame:
     """
     Get list of customers.
     Implements SCD Type 2, so use current=True to get only current rows of
@@ -116,16 +116,14 @@ def get_customers(current: bool = False, branch: int | None = None) -> pandas.Da
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_locations(
-    current: bool = False, customer: int | None = None
-) -> pandas.DataFrame:
+def get_locations(current: bool = False, customer: int | None = None) -> pd.DataFrame:
     """
     Get list of locations.
     Implements SCD Type 2, so use current=True to get only current rows of
@@ -148,8 +146,8 @@ def get_locations(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -157,7 +155,7 @@ def get_locations(
 
 def get_machines(
     current: bool = False, location: int | None = None, route: int | None = None
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     Get list of machines.
     Implements SCD Type 2, so use current=True to get only current rows of
@@ -183,8 +181,8 @@ def get_machines(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -194,7 +192,7 @@ def get_coils(
     current: bool = False,
     machine: int | None = None,
     item: int | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     Get list of coils. I.E. every coil in every machine planogram.
     Quite a lot of data, but tells you which product is where.
@@ -221,8 +219,8 @@ def get_coils(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -232,7 +230,7 @@ def get_micromarkets(
     current: bool = False,
     location: int | None = None,
     route: int | None = None,
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     Get list of micromarkets.
     Implements SCD Type 2, so use current=True to get only current rows of
@@ -258,14 +256,14 @@ def get_micromarkets(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_telemetry_devices() -> pandas.DataFrame:
+def get_telemetry_devices() -> pd.DataFrame:
     """
     Get list of telemetry devices.
     """
@@ -276,14 +274,14 @@ def get_telemetry_devices() -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_items(current: bool = False) -> pandas.DataFrame:
+def get_items(current: bool = False) -> pd.DataFrame:
     """
     Get list of items.
     Implements SCD Type 2, so use current=True to get only current rows of
@@ -301,14 +299,14 @@ def get_items(current: bool = False) -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_item_packs(item: int | None = None) -> pandas.DataFrame:
+def get_item_packs(item: int | None = None) -> pd.DataFrame:
     """
     Get list of item packs.
 
@@ -326,8 +324,8 @@ def get_item_packs(item: int | None = None) -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
@@ -335,7 +333,7 @@ def get_item_packs(item: int | None = None) -> pandas.DataFrame:
 
 def get_item_pack_barcodes(
     item: int | None = None, item_pack: int | None = None
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """
     Get list of item pack barcodes.
 
@@ -356,14 +354,14 @@ def get_item_pack_barcodes(
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_suppliers() -> pandas.DataFrame:
+def get_suppliers() -> pd.DataFrame:
     """
     Get list of suppliers.
     """
@@ -374,14 +372,14 @@ def get_suppliers() -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_supplier_branch() -> pandas.DataFrame:
+def get_supplier_branch() -> pd.DataFrame:
     """
     Get list of supplier branches.
     """
@@ -392,14 +390,14 @@ def get_supplier_branch() -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_supplier_items() -> pandas.DataFrame:
+def get_supplier_items() -> pd.DataFrame:
     """
     Get list of supplier items.
     NOTE: Doesn't seem to be used yet. No rows as of writing.
@@ -411,14 +409,14 @@ def get_supplier_items() -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
 
 
-def get_warehouses(branch: int | None = None) -> pandas.DataFrame:
+def get_warehouses(branch: int | None = None) -> pd.DataFrame:
     """
     Get list of warehouses.
 
@@ -436,8 +434,8 @@ def get_warehouses(branch: int | None = None) -> pandas.DataFrame:
         cur.execute(query)
         df = cur.fetch_pandas_all()
     except Exception as e:
-        logger.error("Error reading Snowflake table", e)
-        raise Exception("Error reading Snowflake table", e)
+        logger.error(f"Error reading Snowflake table: {e}")
+        raise Exception(f"Error reading Snowflake table: {e}") from e
     finally:
         conn.close()
     return df
