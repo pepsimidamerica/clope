@@ -16,7 +16,6 @@ def _get_snowflake_connection(
     """
     for env in [
         "SNOWFLAKE_USER",
-        # "SNOWFLAKE_PASSWORD",
         "SNOWFLAKE_PRIVATE_KEY_FILE",
         "SNOWFLAKE_PRIVATE_KEY_FILE_PWD",
         "SNOWFLAKE_ACCOUNT",
@@ -29,7 +28,6 @@ def _get_snowflake_connection(
     conn = snowflake.connector.connect(
         account=os.environ["SNOWFLAKE_ACCOUNT"],
         user=os.environ["SNOWFLAKE_USER"],
-        # password=os.environ["SNOWFLAKE_PASSWORD"],
         authenticator="SNOWFLAKE_JWT",
         private_key_file=os.environ["SNOWFLAKE_PRIVATE_KEY_FILE"],
         private_key_file_pwd=os.environ["SNOWFLAKE_PRIVATE_KEY_FILE_PWD"],

@@ -46,6 +46,8 @@ df_sales = facts.get_sales_revenue_by_day_fact()
 | Snowflake | Yes | SNOWFLAKE_PRIVATE_KEY_FILE_PWD | Password for the private key file |
 | Snowflake | Yes | SNOWFLAKE_ACCOUNT | Snowflake account you're connecting to. Should be something along the lines of "{Cantaloupe account}-{Your Company Name}" |
 | Snowflake | Yes | SNOWFLAKE_DATABASE | Snowflake database to connect to. Likely begins with "PRD_SEED...". |
+| Snowflake | Yes | SNOWFLAKE_WAREHOUSE | Snowflake warehouse to connect to. |
+
 
 ## Spotlight
 

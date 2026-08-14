@@ -6,9 +6,8 @@ import io
 import logging
 import os
 
-import aiohttp
+import httpx2
 import pandas as pd
-import requests
 from tenacity import (
     after_log,
     before_log,
@@ -26,9 +25,8 @@ logger = logging.getLogger(__name__)
     wait=wait_exponential(multiplier=1, min=4, max=10),
     retry=retry_if_exception_type(
         (
-            requests.exceptions.ConnectionError,
-            requests.exceptions.Timeout,
-            requests.exceptions.RequestException,
+            httpx2.TimeoutException,
+            httpx2.NetworkError,
         )
     ),
     before=before_log(logger, logging.INFO),
@@ -63,22 +61,25 @@ def run_report(
     current_params = list(params) if params is not None else []
     current_params.append(("ReportId", report_id))
 
+    # Convert params to a dictionary for the request
+    params_dict = {}
+    for key, value in current_params:
+        params_dict.setdefault(key, []).append(value)
+
     try:
-        response = requests.get(
+        response = httpx2.get(
             os.environ.get("CLO_BASE_URL", "https://api.mycantaloupe.com")
             + "/Reports/Run",
             auth=(os.environ["CLO_USERNAME"], os.environ["CLO_PASSWORD"]),
-            params=current_params,
+            params=params_dict,
             timeout=600,
         )
         response.raise_for_status()
         excel_data = response.content
-    except requests.exceptions.HTTPError as e:
-        logger.error(
-            f"Error, could not run report: {e.response.status_code} - {e.response.content}"
-        )
+    except httpx2.HTTPError as e:
+        logger.error(f"Error, could not run report: {e.request.url} - {e}")
         raise
-    except requests.exceptions.RequestException as e:
+    except httpx2.RequestError as e:
         logger.error(f"Error, could not run report: {e}")
         raise
 
@@ -97,10 +98,8 @@ def run_report(
     wait=wait_exponential(multiplier=1, min=4, max=10),
     retry=retry_if_exception_type(
         (
-            aiohttp.ClientConnectionError,
-            aiohttp.ClientResponseError,
-            aiohttp.ClientPayloadError,
-            aiohttp.ServerTimeoutError,
+            httpx2.TimeoutException,
+            httpx2.NetworkError,
         )
     ),
     before=before_log(logger, logging.INFO),
@@ -136,20 +135,23 @@ async def async_run_report(
     current_params = list(params) if params is not None else []
     current_params.append(("ReportId", report_id))
 
-    async with aiohttp.ClientSession() as session:
+    # Convert params to a dictionary for the request
+    params_dict = {}
+    for key, value in current_params:
+        params_dict.setdefault(key, []).append(value)
+
+    async with httpx2.AsyncClient() as client:
         try:
-            async with session.get(
+            res = await client.get(
                 os.environ.get("CLO_BASE_URL", "https://api.mycantaloupe.com")
                 + "/Reports/Run",
-                auth=aiohttp.BasicAuth(
-                    os.environ["CLO_USERNAME"], os.environ["CLO_PASSWORD"]
-                ),
-                params=current_params,
-                timeout=aiohttp.ClientTimeout(total=600),
-            ) as response:
-                response.raise_for_status()
-                excel_data = await response.read()
-        except aiohttp.ClientError as e:
+                auth=(os.environ["CLO_USERNAME"], os.environ["CLO_PASSWORD"]),
+                params=params_dict,
+                timeout=600,
+            )
+            res.raise_for_status()
+            excel_data = await res.aread()
+        except httpx2.HTTPError as e:
             logger.error(f"Error, could not run report: {e}")
             raise
 
@@ -161,3 +163,20 @@ async def async_run_report(
         raise Exception(f"Error reading excel file: {e}") from e
 
     return report_df
+
+
+# if __name__ == "__main__":
+#     from dotenv import load_dotenv
+
+#     load_dotenv()
+#     df_delivery_prepick = run_report(
+#         "36626",
+#         [
+#             ("filter0", "2026-08-14"),
+#             ("filter0", "2026-08-18"),
+#             ("filter16", "Delivery"),
+#         ],
+#         {"Item Code": str, "Customer Code": str},
+#     )
+#     # Save to Excel
+#     df_delivery_prepick.to_excel("delivery_prepick.xlsx", index=False)

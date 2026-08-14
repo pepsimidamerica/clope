@@ -88,31 +88,3 @@ def date_to_yearkey(date: datetime) -> int:
     Convert a datetime object to a yearkey.
     """
     return date.year - 1900 + 1
-
-
-# Commented out in-progress code
-# def date_dim(
-#     datekey: int | None = None, date: datetime | None = None
-# ) -> pd.DataFrame:
-#     """
-#     Retrieve corresponding datekey from a given date or vice versa.
-#     """
-#     if date and datekey:
-#         raise Exception("Only one of datekey or date must be provided")
-#     if not datekey and not date:
-#         raise Exception("Either datekey or date must be provided")
-
-#     conn = _get_snowflake_connection(schema="TIME_DIMENSION")
-#     try:
-#         if datekey:
-#             query = f"SELECT * FROM DATE_DIM WHERE DATEKEY = {datekey}"
-#         else:
-#             query = f"SELECT * FROM DATE_DIM WHERE DATE = '{date}'"
-#         cur = conn.cursor()
-#         cur.execute(query)
-#         df = cur.fetch_pd_all()
-#     except Exception as e:
-#         raise Exception("Error reading Snowflake table", e)
-#     finally:
-#         conn.close()
-#     return df
