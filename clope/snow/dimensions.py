@@ -33,8 +33,7 @@ def get_operators() -> pd.DataFrame:
 
 def get_lines_of_business() -> pd.DataFrame:
     """
-    Reference table for the three lines of business.
-    Delivery, Micromarket, and Vending
+    Reference table for the three lines of business: Delivery, Micromarket, and Vending.
     """
     conn = _get_snowflake_connection()
     try:

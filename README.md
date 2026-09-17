@@ -141,3 +141,30 @@ A fact is the central information being stored. Generally, things that are not c
 ### Functions
 
 Also included in Cantaloupe's Snowflake are a couple functions. General intention seems to be gathering a subset of data from a couple core fact tables. Haven't yet implemented wrappers for these.
+
+## Prepick
+
+Cantaloupe has a SOAP interface that allows picking software to fulfill, update, and finish prepick orders. Typically the SOAP interface would be used directly by that picking system (e.g. Lightspeed) rather than via python, but may be useful for some specific circumstances.
+
+The expected flow would be something along these lines:
+1. Pull in Master Data/lists
+
+    a. LoadItemCategories
+
+    b. LoadItems
+
+    c. LoadMachineClasses
+
+    d. LoadRoutes
+
+2. Pull in the orders for the next day by route
+
+    a. LoadPrepick (Date, Route)
+
+3. Complete each pick in the warehouse then send back any update
+
+    a. UpdatePrepick (Schedule, Machine, Coil, Item, Quantity)
+
+4. When each route is complete, notify Seed the schedule can be locked for that route
+
+    a. FinishPrepickUpdate (Schedule)

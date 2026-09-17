@@ -163,20 +163,3 @@ async def async_run_report(
         raise Exception(f"Error reading excel file: {e}") from e
 
     return report_df
-
-
-# if __name__ == "__main__":
-#     from dotenv import load_dotenv
-
-#     load_dotenv()
-#     df_delivery_prepick = run_report(
-#         "36626",
-#         [
-#             ("filter0", "2026-08-14"),
-#             ("filter0", "2026-08-18"),
-#             ("filter16", "Delivery"),
-#         ],
-#         {"Item Code": str, "Customer Code": str},
-#     )
-#     # Save to Excel
-#     df_delivery_prepick.to_excel("delivery_prepick.xlsx", index=False)

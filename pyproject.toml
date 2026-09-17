@@ -1,36 +1,33 @@
 [project]
 name = "clope"
 version = "1.0"
-description = "Python package for interacting with the Cantaloupe/Seed vending system. Primarily the Spotlight API."
+description = "Python package for interacting with the Cantaloupe/Seed vending system (Spotlight, Snowflake, and Prepick APIs)."
 readme = "README.md"
 authors = [{ name = "Jordan Maynor", email = "jmaynor@pepsimidamerica.com" }]
 requires-python = ">=3.12"
-dependencies = [
+dependencies = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license-files = ["LICENSE"]
+
+[project.optional-dependencies]
+spotlight = [
     "httpx2",
     "openpyxl",
     "pandas",
     "tenacity",
 ]
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
+snow = [
+    "pandas",
+    "snowflake-connector-python[pandas]>=4.0.0",
 ]
-license = { file = "LICENSE" }
-
-[project.urls]
-Homepage = "https://github.com/pepsimidamerica/clope"
-
-[build-system]
-requires = ["uv_build>=0.9.4,<0.13"]
-build-backend = "uv_build"
-
-[tool.uv.build-backend]
-module-name = "clope"
-module-root = ""
-source-exclude = ["*.p8", "*.pub"]
-
-[dependency-groups]
-dev = ["python-dotenv>=1.1.0"]
-
-[project.optional-dependencies]
-snow = ["snowflake-connector-python[pandas]>=4.0.0"]
+prepick = [
+    "zeep[async]>=4.3.3",
+]
+all = [
+    "clope[spotlight]",
+    "clope[snow]",
+    "clope[prepick]",
+]
