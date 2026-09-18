@@ -1,6 +1,6 @@
 # Overview
 
-clope is a Python package for interacting with the Cantaloupe/Seed Pro system. clope touches a couple different APIs/interfaces: the Spotlight reporting API, the Snowflake data warehouse, and the Prepick SOAP interface. All relate to Cantaloupe but have different credentials and are bought separately.
+clope is a Python package for interacting with the Cantaloupe/Seed Pro system. clope touches a couple different APIs/interfaces: the Spotlight reporting API, the Snowflake data warehouse, and the Prepick SOAP interface. All relate to Cantaloupe but have different credentials and are separate add-ons.
 
 ## Installation
 
@@ -73,23 +73,11 @@ A string ID for the report in Cantaloupe. When logged into Seed Office, the repo
 
 Optional parameter, list of tuples of strings. Some Spotlight reports have required filters which must be supplied to get data back. Date ranges being a common one. Cantaloupe's error messages are fairly clear, in my experience, with telling you what parameteres are needed to run the report and in what format they should be. First element of tuple is filter name and second is filter value. Filter names are in format of "filter0", "filter1", "filter2", etc.
 
-Example call
-
-```python
-# Import package
-from clope.spotlight import run_report
-
-# Run report with a report_id and additional parameters
-df_report = run_report("123", [("filter0", "2024-01-01"), ("filter1", "2024-01-31")])
-```
-
 ## Snowflake
 
 Cantaloupe also offers a data warehouse product in Snowflake. Good for aggregating lots of information, as well as pulling historical info. However, notably, data is only pushed from Seed into the Snowflake data warehouse once a day, so it is not necessarily going to be accurate as of that moment.
 
-Also something to keep in mind is that the system makes use of SCD (slowly changing dimension) in order to keep track of historical info vs current info. So some care should be taken when interpreting the data.
-
-For each dataset that uses SCD, a parameter has been included to restrict to current data only or include all data.
+Also something to keep in mind is that the system makes use of SCD (slowly changing dimension) in order to keep track of historical info vs current info. So some care should be taken when interpreting the data. For each dataset that uses SCD, a parameter has been included to restrict to current data only or include all data.
 
 Authentication to Snowflake is handled via [key-pair authentication](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-connect#using-key-pair-authentication-and-key-pair-rotation). You'll need to create a key pair using openssl and set the snowflake user's RSA_PUBLIC_KEY.
 
@@ -97,7 +85,7 @@ Authentication to Snowflake is handled via [key-pair authentication](https://doc
 
 Cantaloupe has a SOAP interface that allows picking software to fulfill, update, and finish prepick orders. Typically the SOAP interface would be used directly by that picking system (e.g. Lightspeed) rather than via python, but may be useful for some specific circumstances. Don't have access to the SOAP interface currently, so module is not yet fully functional.
 
-The expected flow would be something along these lines:
+The expected flow would be something along these lines (from Cantaloupe's documentation):
 1. Pull in Master Data/lists
 
     a. LoadItemCategories
