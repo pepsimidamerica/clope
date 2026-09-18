@@ -11,6 +11,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 license-files = ["LICENSE"]
+license= "Unlicense"
 
 [project.optional-dependencies]
 spotlight = [
@@ -44,4 +45,4 @@ build-backend = "uv_build"
 [tool.uv.build-backend]
 module-name = "clope"
 module-root = ""
-source-exclude = ["tests/**"]
+source-exclude = ["tests/**", "*.p8", "*.pub"]

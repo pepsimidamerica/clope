@@ -34,7 +34,8 @@ Several environment variables are required for clope to function. Functionality 
 | Snowflake | Yes | SNOWFLAKE_ACCOUNT | Snowflake account you're connecting to. Should be something along the lines of "{Cantaloupe account}-{Your Company Name}" |
 | Snowflake | Yes | SNOWFLAKE_DATABASE | Snowflake database to connect to. Likely begins with "PRD_SEED...". |
 | Snowflake | Yes | SNOWFLAKE_WAREHOUSE | Snowflake warehouse to connect to. |
-| Prepick | ? | | Not yet implemented |
+| Prepick | Yes | PREPICK_USERNAME | Username for the Prepick SOAP interface. |
+| Prepick | Yes | PREPICK_PASSWORD | Password for the Prepick SOAP interface. |
 
 Quick start:
 
@@ -48,9 +49,10 @@ df_report = run_report(
 from clope.snow import facts
 df_sales = facts.get_sales_revenue_by_day_fact(branch=1, location=2)
 
+import asyncio
 from clope.prepick import PrepickClient
 cli = PrepickClient()
-items = cli.load_items()
+items = asyncio.run(cli.load_items())
 ```
 
 ## Spotlight
@@ -83,7 +85,7 @@ Authentication to Snowflake is handled via [key-pair authentication](https://doc
 
 ## Prepick
 
-Cantaloupe has a SOAP interface that allows picking software to fulfill, update, and finish prepick orders. Typically the SOAP interface would be used directly by that picking system (e.g. Lightspeed) rather than via python, but may be useful for some specific circumstances. Don't have access to the SOAP interface currently, so module is not yet fully functional.
+Cantaloupe has a SOAP interface that allows picking software to fulfill, update, and finish prepick orders. Typically the SOAP interface would be used directly by that picking system (e.g. Lightspeed) rather than via python, but may be useful for some specific circumstances. Don't have access to the SOAP interface currently, so module may or may not be working.
 
 The expected flow would be something along these lines (from Cantaloupe's documentation):
 1. Pull in Master Data/lists
