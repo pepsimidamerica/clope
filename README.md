@@ -1,40 +1,27 @@
 # Overview
 
-clope (see-lope) is a Python package for interacting with the Cantaloupe/Seed vending system. Primarily being a wrapper for their Spotlight API. It uses the pandas library to return information from a given spotlight report as a dataframe object. clope also has functionality for connecting to the snowflake data warehouse Cantaloupe product as well.
+clope is a Python package for interacting with the Cantaloupe/Seed Pro system. clope touches a couple different APIs/interfaces: the Spotlight reporting API, the Snowflake data warehouse, and the Prepick SOAP interface. All relate to Cantaloupe but have different credentials and are bought separately.
 
 ## Installation
 
-Base install (Spotlight only):
+Each of the three modules is separated into optional dependency groups so that you only pull in the dependencies you need. A base install will not include any dependencies (Note: this differs from previous releases where spotlight module was treated as the default).
 
-`pip install clope`
+```
+# All modules/dependencies
+pip install "clope[all]"
 
-Install with Snowflake support:
+# Spotlight only
+pip install "clope[spotlight]"
 
-`pip install "clope[snow]"`
+# Prepick and Snowflake
+pip install "clope[prepick,snow]"
+
+# etc., whatever combos
+```
 
 ## Usage
 
-Several environment variables are required for clope to function. Functionality is divided into two modules, so vars are only required if you are using functions from that particular module.
-
-Quick start (Spotlight):
-
-```python
-from clope.spotlight import run_report
-
-df_report = run_report(
- "123",
- [("filter0", "2024-01-01"), ("filter1", "2024-01-31")],
-)
-```
-
-Quick start (Snowflake):
-
-```python
-from clope.snow import facts
-
-# Example: load a fact table (adjust function and params to your use case)
-df_sales = facts.get_sales_revenue_by_day_fact()
-```
+Several environment variables are required for clope to function. Functionality is divided into three modules, so vars are only required if you are using functions from that particular module.
 
 | Module | Required? | Env Variable | Description |
 | --------- | --------- | ------------ | ----------- |
@@ -47,11 +34,28 @@ df_sales = facts.get_sales_revenue_by_day_fact()
 | Snowflake | Yes | SNOWFLAKE_ACCOUNT | Snowflake account you're connecting to. Should be something along the lines of "{Cantaloupe account}-{Your Company Name}" |
 | Snowflake | Yes | SNOWFLAKE_DATABASE | Snowflake database to connect to. Likely begins with "PRD_SEED...". |
 | Snowflake | Yes | SNOWFLAKE_WAREHOUSE | Snowflake warehouse to connect to. |
+| Prepick | ? | | Not yet implemented |
 
+Quick start:
+
+```python
+from clope.spotlight import run_report
+df_report = run_report(
+ "123",
+ [("filter0", "2024-01-01"), ("filter1", "2024-01-31")],
+)
+
+from clope.snow import facts
+df_sales = facts.get_sales_revenue_by_day_fact(branch=1, location=2)
+
+from clope.prepick import PrepickClient
+cli = PrepickClient()
+items = cli.load_items()
+```
 
 ## Spotlight
 
-The spotlight module involves interaction with the Cantaloupe Spotlight API. The API allows you to run a Spotlight report remotely and retrieve the raw Excel data via HTTP requests. Reports must be set up in the browser prior to using the API. This is quick and suited for getting data that needs to be up-to-date at that moment.
+The spotlight module involves interaction with the Cantaloupe Spotlight API. The API allows you to run a Spotlight report remotely and retrieve the raw Excel data via HTTP requests. Reports must be set up in Seed Office prior to using the API. This is quick and suited for getting data that needs to be up-to-date at that moment.
 
 ### Run Spotlight Report (run_report())
 
@@ -81,7 +85,7 @@ df_report = run_report("123", [("filter0", "2024-01-01"), ("filter1", "2024-01-3
 
 ## Snowflake
 
-Cantaloupe also offers a data warehouse product in Snowflake. Good for aggregating lots of information, as well as pulling historical information. However, notably, data is only pushed from Seed into the Snowflake data warehouse once a day, so it is not necessarily going to be accurate as of that moment.
+Cantaloupe also offers a data warehouse product in Snowflake. Good for aggregating lots of information, as well as pulling historical info. However, notably, data is only pushed from Seed into the Snowflake data warehouse once a day, so it is not necessarily going to be accurate as of that moment.
 
 Also something to keep in mind is that the system makes use of SCD (slowly changing dimension) in order to keep track of historical info vs current info. So some care should be taken when interpreting the data.
 
@@ -89,62 +93,9 @@ For each dataset that uses SCD, a parameter has been included to restrict to cur
 
 Authentication to Snowflake is handled via [key-pair authentication](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-connect#using-key-pair-authentication-and-key-pair-rotation). You'll need to create a key pair using openssl and set the snowflake user's RSA_PUBLIC_KEY.
 
-### Dates
-
-In Snowflake, most date columns are represented by an integer key, rather than the date itself. A couple functions are included with regards to dates. If working directly with Snowflake, you would join the date table onto the fact table you're working with. However, from what I can see the dates are largely deterministic. 1 is 1900-01-01, 2 is 1900-01-02. So I just directly translate from key to date and vice versa with some date math. Much quicker and should give same results as querying the date table itself.
-
-### Dimensions
-
-Dimensions describe facts. The location something happened in. The route it happened on. Dimensions generally change over time and make the most use of the SCD schema.
-
-- Barcodes (for each pack)
-- Branches
-- Coils (planogram slots)
-- Customers
-- Devices (telemetry)
-- Item Packs (UOMs)
-- Items
-- Lines of Business
-- Locations
-- Machines
-- Micromarkets
-- Operators
-- Routes
-- Supplier Branch
-- Supplier Items (Not yet used seemingly)
-- Suppliers
-- Warehouses
-- Machine Alerts
-
-### Facts
-
-A fact is the central information being stored. Generally, things that are not changing. A sale, an inventory, a product movement.
-
-- Cashless Vending Tranaction
-- Collection Micromarket Sales
-- Order to Fulfillment (Delivery)
-- Order to Fulfillment (Vending and Micromarket)
-- Delivery Order Receive
-- Sales Revenue By Day
-- Sales Revenue By Visit
-- Sales By Coil
-- Scheduling Machine
-- Scheduling Route Summary
-- Telemetry Sales
-- Vending Micromarket Visit
-- Warehouse Inventory
-- Warehouse Observed Inventory
-- Warehouse Product Movement
-- Warehouse Purchase
-- Warehouse Receive
-
-### Functions
-
-Also included in Cantaloupe's Snowflake are a couple functions. General intention seems to be gathering a subset of data from a couple core fact tables. Haven't yet implemented wrappers for these.
-
 ## Prepick
 
-Cantaloupe has a SOAP interface that allows picking software to fulfill, update, and finish prepick orders. Typically the SOAP interface would be used directly by that picking system (e.g. Lightspeed) rather than via python, but may be useful for some specific circumstances.
+Cantaloupe has a SOAP interface that allows picking software to fulfill, update, and finish prepick orders. Typically the SOAP interface would be used directly by that picking system (e.g. Lightspeed) rather than via python, but may be useful for some specific circumstances. Don't have access to the SOAP interface currently, so module is not yet fully functional.
 
 The expected flow would be something along these lines:
 1. Pull in Master Data/lists
@@ -161,7 +112,7 @@ The expected flow would be something along these lines:
 
     a. LoadPrepick (Date, Route)
 
-3. Complete each pick in the warehouse then send back any update
+3. Complete each pick in the warehouse then send back any updates
 
     a. UpdatePrepick (Schedule, Machine, Coil, Item, Quantity)
 

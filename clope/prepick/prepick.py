@@ -28,13 +28,12 @@ class PrepickClient:
         return items
 
 
-# Soap Actions
+# TODO Soap Actions
 
 # CreateWarehouseTransferTransaction
 # FinishPrepickUpdate
 # LoadAlreadyPickedMchines
 # LoadItemCategories
-# LoadItems
 # LoadMachineClasses
 # LoadPrepick
 # LoadRoutes
